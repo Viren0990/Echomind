@@ -9,3 +9,8 @@ export const signupSchema = z.object({
                .regex(/^\w+$/, "Username can only contain letters, numbers, and underscores"),
     password:  z.string().min(6, "Password must be at least 6 characters"),
 })
+
+export const loginSchema = z.object({
+  email: z.string().trim().email("Invalid email format"),
+  password: z.string().min(6),
+});

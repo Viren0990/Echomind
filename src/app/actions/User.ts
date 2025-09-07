@@ -8,7 +8,8 @@ import { signupSchema } from "@/types";
 
 
 export async function signup(email:string, username: string, password: string){
-    const saltRounds = process.env.BCRYPT_SALT_ROUNDS?? 10;
+    const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS ?? 10);
+
     const validated = signupSchema.safeParse({email,username,password});
     if (!validated.success) {
         return { success: false, message: validated.error.errors[0].message };
@@ -24,7 +25,10 @@ export async function signup(email:string, username: string, password: string){
             }
         })
 
-        return { success: true, user };
+        return { 
+            success: true, 
+            user: { id: user.id, email: user.email, username: user.username } 
+        };
     }catch(error: any){
         if (error.code === "P2002") {
             return { success: false, message: "Email is already taken" };

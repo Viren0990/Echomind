@@ -1,5 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
+import { loginSchema } from "@/types";
+
 import prisma from "@/db/index";
 import bcrypt from "bcrypt";
 
@@ -36,19 +38,19 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
           throw new Error("Email and password are required.");
         }
 
+
+        const parsed = loginSchema.safeParse(credentials);
+        if (!parsed.success) throw new Error("Invalid input.");
+        const { email, password } = parsed.data;
+
        
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+          where: { email },
+          select: { id: true, email: true, username: true, password: true },
         });
 
-        if (!user) {
-          throw new Error("User not found.");
-        }
-
-        
-        const isValidPassword = await bcrypt.compare(credentials.password, user.password);
-        if (!isValidPassword) {
-          throw new Error("Invalid password.");
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+          throw new Error("Invalid credentials.");
         }
 
         return {

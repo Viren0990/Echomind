@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 export default function Signin(){
     return(
-        <div className="flex min-h-screen">
+        <div className="flex max-h-screen">
             <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-pink-500 via-pink-600 to-pink-700 flex-col justify-center items-center p-12 text-white relative overflow-hidden">
                            
                             <div className="absolute top-0 left-0 w-full h-full">
