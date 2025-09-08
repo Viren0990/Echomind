@@ -13,5 +13,5 @@ export async function middleware(req: NextRequest) {
 
 // Apply middleware to protected routes
 export const config = {
-  matcher: ["/landing"], // ✅ Correctly applying multiple matchers
+  matcher: [], // ✅ Correctly applying multiple matchers
 };

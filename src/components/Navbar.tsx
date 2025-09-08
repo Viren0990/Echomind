@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { Code2, Menu, X } from "lucide-react"; // Added X for close button
 import { Button } from "@/components/ui/button";
 import { useState } from "react";// Import animations
-import { signOut } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import rrr from "@/images/rrr.png"
 import Image from 'next/image'
@@ -12,6 +12,7 @@ import Image from 'next/image'
 
 
 export const Navbar = () => {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -54,16 +55,25 @@ export const Navbar = () => {
 
         
         <div className="hidden md:flex gap-2">
-            <Button
-                className="border-1 border-white bg-transparent hover:bg-pink-600"
-                onClick={async () => {
-                await signOut({ redirect: false });
-                router.push("/signin"); // Force redirect
-                setIsMenuOpen(false);
-                }}
-            >
-                Logout
-            </Button>
+            <div>
+        {status === "loading" ? (
+          <p className="text-gray-500">Loading...</p>
+        ) : session ? (
+          <Button
+            onClick={() => signOut({ callbackUrl: "/signin" })}
+            className="bg-pink-500 hover:bg-pink-600 text-white"
+          >
+            Sign Out
+          </Button>
+        ) : (
+          <Button
+            onClick={() => signIn(undefined, { callbackUrl: "/landing" })}
+            className="bg-pink-500 hover:bg-pink-600 text-white"
+          >
+            Sign In
+          </Button>
+        )}
+      </div>
         </div>
 
         
@@ -91,16 +101,25 @@ export const Navbar = () => {
                   {label}
                 </Link>
               ))}
-              <Button
-                className="w-30 bg-pink-600 hover:bg-white hover:text-pink-600"
-                onClick={async () => {
-                await signOut({ redirect: false });
-                router.push("/signin"); // Force redirect
-                setIsMenuOpen(false);
-                }}
-              >
-                Logout
-              </Button>
+              <div>
+        {status === "loading" ? (
+          <p className="text-gray-500">Loading...</p>
+        ) : session ? (
+          <Button
+            onClick={() => signOut({ callbackUrl: "/signin" })}
+            className="bg-pink-500 hover:bg-pink-600 text-white"
+          >
+            Sign Out
+          </Button>
+        ) : (
+          <Button
+            onClick={() => signIn(undefined, { callbackUrl: "/landing" })}
+            className="bg-pink-500 hover:bg-pink-600 text-white"
+          >
+            Sign In
+          </Button>
+        )}
+      </div>
             </nav>
           </div>
         )}
