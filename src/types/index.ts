@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { TAGS } from "@/lib/tags";
+export type TagName = keyof typeof TAGS;
 
 export const signupSchema = z.object({
     email:     z.string().trim().email("Invalid email format"),
@@ -14,3 +16,14 @@ export const loginSchema = z.object({
   email: z.string().trim().email("Invalid email format"),
   password: z.string().min(6),
 });
+
+
+export interface CreateCharacterInput {
+  title: string;
+  description: string;
+  personality: string;
+  scenario: string;
+  initialMessage: string;
+  tags: TagName[];
+  profilePhoto: File;
+}

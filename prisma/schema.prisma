@@ -30,13 +30,17 @@ model Character {
   title           String
   profilePhotoURL String?
   description     String
+  personality     String // new
+  scenario        String  // new
+  initialMessage  String  // new
   tags            Tag[]      @relation("CharacterTags")
   chats           Chat[]
   user            User      @relation(fields: [creator], references: [id])
   creator         String
   createdAt       DateTime  @default(now())
   updatedAt       DateTime @updatedAt
-} 
+}
+
 
 
 model Chat {

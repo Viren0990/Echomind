@@ -27,7 +27,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-pink-400/15 backdrop-blur-md">
+    <nav className="fixed top-0 w-full z-50 bg-transparent backdrop-blur-md">
       <div className="flex h-12 items-center justify-between pr-2">
         {/* Logo */}
         <div className="inline-flex justify-center items-center">

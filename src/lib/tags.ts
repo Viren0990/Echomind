@@ -1,0 +1,17 @@
+export const TAGS: Record<string, string> = {
+  Fantasy: "cmfcefgpx0000szfwepv1jcrw",
+  Romance: "cmfcefhep0001szfwnyiqypy0",
+  "Sci-Fi": "cmfcefhs30002szfw62564zp9",
+  Horror: "cmfcefi610003szfwkv9w8w55",
+  Angst: "cmfcefily0004szfwdlyonp7n",
+  Fluff: "cmfcefizc0005szfwslsobzft",
+  "Enemies-to-Lovers": "cmfcefjd90006szfwmed55ava",
+  Smut: "cmfcefjqo0007szfwlztb10ge",
+  Anime: "cmfcefk4b0008szfwwuzvogrf",
+  "Dead-Dove": "cmfcefkhp0009szfwwpsxeeu3",
+  Comedy: "ccmfcefkvb000aszfw5np2lxru",
+  RPG: "cmfcefl8t000bszfw11p39ceu",
+  Monster: "cmfceflmn000cszfwzhkit10v",
+  Isekai: "cmfcefm0h000dszfw4h6uoaey",
+  Limitless: "cmfduixq70000szbwj4dxghyh",
+};
