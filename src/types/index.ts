@@ -25,5 +25,5 @@ export interface CreateCharacterInput {
   scenario: string;
   initialMessage: string;
   tags: TagName[];
-  profilePhoto: File;
+  profilePhoto: File | null;
 }

@@ -4,6 +4,8 @@
 import bcrypt from "bcrypt";
 import prisma from "@/db";
 import { signupSchema } from "@/types";
+import { getServerSession } from "next-auth";
+import { NEXT_AUTH_CONFIG } from "@/lib/auth";
 
 
 
@@ -35,5 +37,26 @@ export async function signup(email:string, username: string, password: string){
         }
         console.error("Signup Error:", error);
         return { success: false, message: "An error occurred. Please try again later." };
+    }
+}
+
+export const createPersona = async (title:string, content:string) => {
+    const session = await getServerSession(NEXT_AUTH_CONFIG);
+    if (!session?.user?.id) {
+        return { success: false, message: "Unauthorized" };
+    }
+    
+    try{
+        const persona = await prisma.persona.create({
+            data: {
+                user: { connect: { id: session.user.id } },
+                name: title,
+                content: content,
+            },
+        });
+
+        return { success: true, message: "Persona Created", persona };
+    }catch(error){
+        return { success: false, message: "Error, Try again Later."}
     }
 }

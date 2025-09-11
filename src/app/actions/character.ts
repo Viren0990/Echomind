@@ -15,7 +15,7 @@ const uploadImage = async (file: File) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       { folder: "characters" },
       (error, result) => {
-        if (error) return reject(error);
+        if (error) return reject("error");
         resolve(result);
       }
     );
@@ -26,7 +26,7 @@ const uploadImage = async (file: File) => {
 
 export const uploadCharacter = async (data: CreateCharacterInput) => {
   const session = await getServerSession(NEXT_AUTH_CONFIG);
-
+  console.log("DB URL:", process.env.DATABASE_URL?.split("@")[1]);
   if (!session?.user?.id) {
     return { success: false, message: "Unauthorized" };
   }
