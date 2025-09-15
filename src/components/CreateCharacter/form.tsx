@@ -106,12 +106,11 @@ export const Form = () => {
             setLoading(false);
         }
     }
-
-    return(
+return(
         <div className="pt-10 px-6 pb-8 md:px-20 lg:px-32">
             {/* Header Section */}
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-pink-200 bg-clip-text text-transparent">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
                     Create a Character!
                 </h1>
                 <p className="text-white/90 text-lg max-w-2xl mx-auto">
@@ -123,8 +122,8 @@ export const Form = () => {
             {message && (
                 <div className={`max-w-4xl mx-auto mb-6 p-4 rounded-xl ${
                     message.includes("Successfully") 
-                        ? "bg-green-500 border border-green-400/50 text-green-100" 
-                        : "bg-red-500 border border-red-400/50 text-red-100"
+                        ? "bg-green-500/20 border border-green-400/50 text-green-100" 
+                        : "bg-red-500/20 border border-red-400/50 text-red-100"
                 }`}>
                     {message}
                 </div>
@@ -133,17 +132,17 @@ export const Form = () => {
             <div className="max-w-4xl mx-auto">
                 <form className="space-y-8" onSubmit={handleSubmit}>
                     {/* Image Upload Section */}
-                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white shadow-lg">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-white shadow-2xl">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-10 h-10 bg-pink-500/30 rounded-full flex items-center justify-center">
+                            <div className="w-10 h-10 bg-[#b565a7] rounded-full flex items-center justify-center">
                                 <Upload className="w-5 h-5 text-white" />
                             </div>
-                            <Label className="text-white text-xl font-semibold">Character Image</Label>
+                            <Label className="text-[#b565a7] text-xl font-semibold">Character Image</Label>
                         </div>
                         
                         {!imagePreview ? (
-                            <div className="border-2 border-dashed border-white/30 rounded-xl p-8 text-center hover:border-pink-300/50 transition-colors bg-white/5">
-                                <Upload className="w-12 h-12 text-white/70 mx-auto mb-4" />
+                            <div className="border-2 border-dashed border-[#b565a7]/40 rounded-xl p-8 text-center hover:border-[#b565a7]/70 transition-colors bg-[#b565a7]/5">
+                                <Upload className="w-12 h-12 text-[#b565a7] mx-auto mb-4" />
                                 <Input
                                     type="file"
                                     className="hidden"
@@ -154,16 +153,16 @@ export const Form = () => {
                                 />
                                 <label 
                                     htmlFor="character-image" 
-                                    className="cursor-pointer text-white font-medium hover:text-pink-200 transition-colors"
+                                    className="cursor-pointer text-[#b565a7] font-medium hover:text-[#b565a7]/80 transition-colors"
                                 >
                                     Click to upload or drag and drop
                                 </label>
-                                <p className="text-white/60 text-sm mt-2">JPG, JPEG, PNG or WebP (Max 5MB)</p>
+                                <p className="text-[#b565a7]/70 text-sm mt-2">JPG, JPEG, PNG or WebP (Max 5MB)</p>
                             </div>
                         ) : (
-                            <div className="border-2 border-white/30 rounded-xl p-4 bg-white/5">
+                            <div className="border-2 border-[#b565a7]/40 rounded-xl p-4 bg-[#b565a7]/5">
                                 <div className="flex items-center gap-4">
-                                    <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-white/20">
+                                    <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-[#b565a7]/30">
                                         <Image
                                             src={imagePreview}
                                             alt="Preview"
@@ -173,18 +172,18 @@ export const Form = () => {
                                     </div>
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2 mb-2">
-                                            <CheckCircle className="w-5 h-5 text-green-400" />
-                                            <span className="text-white font-medium">Image Selected</span>
+                                            <CheckCircle className="w-5 h-5 text-green-500" />
+                                            <span className="text-[#b565a7] font-medium">Image Selected</span>
                                         </div>
-                                        <p className="text-white/80 text-sm">{profilePhoto?.name}</p>
-                                        <p className="text-white/60 text-xs">
+                                        <p className="text-[#b565a7]/90 text-sm">{profilePhoto?.name}</p>
+                                        <p className="text-[#b565a7]/70 text-xs">
                                             {profilePhoto && (profilePhoto.size / (1024 * 1024)).toFixed(2)} MB
                                         </p>
                                     </div>
                                     <Button
                                         type="button"
                                         onClick={removeImage}
-                                        className="bg-red-500/20 hover:bg-red-500/30 text-red-200 border border-red-400/50 p-2 h-auto"
+                                        className="bg-red-500/20 hover:bg-red-500/30 text-red-600 border border-red-400/50 p-2 h-auto"
                                     >
                                         <X className="w-4 h-4" />
                                     </Button>
@@ -193,13 +192,13 @@ export const Form = () => {
                         )}
                         
                         <div className="mt-4 rounded-lg p-4">
-                            <ul className="text-sm text-white/70 space-y-2">
+                            <ul className="text-sm text-[#b565a7]/80 space-y-2">
                                 <li className="flex items-start gap-2">
-                                    <div className="w-1.5 h-1.5 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
+                                    <div className="w-1.5 h-1.5 bg-[#b565a7] rounded-full mt-2 flex-shrink-0"></div>
                                     <span>Select an image as bot avatar - this will be the main image that other users see</span>
                                 </li>
                                 <li className="flex items-start gap-2">
-                                    <div className="w-1.5 h-1.5 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
+                                    <div className="w-1.5 h-1.5 bg-[#b565a7] rounded-full mt-2 flex-shrink-0"></div>
                                     <span>Accepted formats: PNG, JPG, JPEG, WebP • Maximum size: 5MB</span>
                                 </li>
                             </ul>
@@ -207,36 +206,36 @@ export const Form = () => {
                     </div>
 
                     {/* Basic Info Section */}
-                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white shadow-lg">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-white shadow-2xl">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 bg-pink-500/30 rounded-full flex items-center justify-center">
+                            <div className="w-10 h-10 bg-[#b565a7] rounded-full flex items-center justify-center">
                                 <User className="w-5 h-5 text-white" />
                             </div>
-                            <h2 className="text-white text-xl font-semibold">Basic Information</h2>
+                            <h2 className="text-[#b565a7] text-xl font-semibold">Basic Information</h2>
                         </div>
 
                         <div className="space-y-6">
                             <div className="space-y-3">
-                                <Label className="text-white/90 font-medium">Character Name</Label>
+                                <Label className="text-[#b565a7] font-medium">Character Name</Label>
                                 <Input 
                                     required
                                     value={title}
                                     placeholder="Enter a unique name for your character"
-                                    className="bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:border-pink-400 focus:ring-pink-400/30 h-12 rounded-xl"
+                                    className="bg-[#b565a7]/10 border-[#b565a7]/30 text-[#b565a7] placeholder:text-[#b565a7]/50 focus:border-[#b565a7] focus:ring-[#b565a7]/30 h-12 rounded-xl"
                                     onChange={(e) => {setTitle(e.target.value)}}
                                 />
                             </div>
 
                             <div className="space-y-3">
-                                <Label className="text-white/90 font-medium">Character Bio</Label>
+                                <Label className="text-[#b565a7] font-medium">Character Bio</Label>
                                 <textarea 
                                     required
                                     value={description}
                                     placeholder="Provide a compelling description for your character..."
-                                    className="w-full bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:border-pink-400 focus:ring-pink-400/30 rounded-xl p-4 min-h-[100px] resize-none border"
+                                    className="w-full bg-[#b565a7]/10 border-[#b565a7]/30 text-[#b565a7] placeholder:text-[#b565a7]/50 focus:border-[#b565a7] focus:ring-[#b565a7]/30 rounded-xl p-4 min-h-[100px] resize-none border"
                                     onChange={(e)=>{setDescription(e.target.value)}}
                                 />
-                                <p className="text-sm text-white/70 bg-white/10 rounded-lg p-3">
+                                <p className="text-sm text-[#b565a7]/80 bg-[#b565a7]/10 rounded-lg p-3">
                                     💡 This appears on your character card and helps with discovery, but doesn't influence responses
                                 </p>
                             </div>
@@ -244,15 +243,15 @@ export const Form = () => {
                     </div>
 
                     {/* Tags Section */}
-                    <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white shadow-lg">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-white shadow-2xl">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 bg-pink-500/30 rounded-full flex items-center justify-center">
+                            <div className="w-10 h-10 bg-[#b565a7] rounded-full flex items-center justify-center">
                                 <Settings className="w-5 h-5 text-white" />
                             </div>
-                            <h2 className="text-white text-xl font-semibold">Character Tags</h2>
+                            <h2 className="text-[#b565a7] text-xl font-semibold">Character Tags</h2>
                         </div>
 
-                        <p className="text-white/70 mb-4">Select tags that best describe your character:</p>
+                        <p className="text-[#b565a7]/80 mb-4">Select tags that best describe your character:</p>
                         <div className="flex flex-wrap gap-3">
                             {Object.keys(TAGS).map((tag) => (
                                 <label key={tag} className="group cursor-pointer">
@@ -262,7 +261,7 @@ export const Form = () => {
                                         checked={tags.includes(tag as TagName)}
                                         onChange={() => handleTagChange(tag as TagName)}
                                     />
-                                    <div className="px-4 py-2 bg-white/10 border-2 border-white/30 rounded-full text-white/80 transition-all duration-200 peer-checked:bg-pink-500 peer-checked:border-pink-400 peer-checked:text-white peer-checked:shadow-lg hover:bg-white/20 hover:border-pink-300/50">
+                                    <div className="px-4 py-2 bg-[#b565a7]/10 border-2 border-[#b565a7]/30 rounded-full text-[#b565a7] transition-all duration-200 peer-checked:bg-[#b565a7] peer-checked:border-[#b565a7] peer-checked:text-white peer-checked:shadow-lg hover:bg-[#b565a7]/20 hover:border-[#b565a7]/50">
                                         {tag}
                                     </div>
                                 </label>
@@ -271,20 +270,20 @@ export const Form = () => {
                     </div>
 
                     {/* Character Definition Section */}
-                    <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white shadow-lg">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-white shadow-2xl">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 bg-pink-500/30 rounded-full flex items-center justify-center">
+                            <div className="w-10 h-10 bg-[#b565a7] rounded-full flex items-center justify-center">
                                 <Heart className="w-5 h-5 text-white" />
                             </div>
-                            <h2 className="text-white text-xl font-semibold">Character Definition</h2>
-                            <span className="text-pink-300 text-sm bg-pink-500/20 px-3 py-1 rounded-full">The Heart of Your Character</span>
+                            <h2 className="text-[#b565a7] text-xl font-semibold">Character Definition</h2>
+                            <span className="text-white text-sm bg-[#b565a7] px-3 py-1 rounded-full">The Heart of Your Character</span>
                         </div>
 
                         <div className="space-y-6">
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <Label className="text-white/90 font-medium">Personality</Label>
-                                    <span className="text-xs text-pink-300 bg-pink-500/20 px-2 py-1 rounded-full">
+                                    <Label className="text-[#b565a7] font-medium">Personality</Label>
+                                    <span className="text-xs text-white bg-[#b565a7] px-2 py-1 rounded-full">
                                         {estimateTokens(personality)} tokens
                                     </span>
                                 </div>
@@ -292,18 +291,18 @@ export const Form = () => {
                                     required
                                     value={personality}
                                     placeholder="Describe your character's persona, traits, and how they interact with others..."
-                                    className="w-full bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:border-pink-400 focus:ring-pink-400/30 rounded-xl p-4 min-h-[120px] resize-none border"
+                                    className="w-full bg-[#b565a7]/10 border-[#b565a7]/30 text-[#b565a7] placeholder:text-[#b565a7]/50 focus:border-[#b565a7] focus:ring-[#b565a7]/30 rounded-xl p-4 min-h-[120px] resize-none border"
                                     onChange={(e) => {setPersonality(e.target.value)}}
                                 />
-                                <p className="text-sm text-white/70 bg-white/10 rounded-lg p-3">
+                                <p className="text-sm text-[#b565a7]/80 bg-[#b565a7]/10 rounded-lg p-3">
                                     ✨ Define how your character thinks, feels, and behaves in conversations
                                 </p>
                             </div>
 
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <Label className="text-white/90 font-medium">Scenario</Label>
-                                    <span className="text-xs text-pink-300 bg-pink-500/20 px-2 py-1 rounded-full">
+                                    <Label className="text-[#b565a7] font-medium">Scenario</Label>
+                                    <span className="text-xs text-white bg-[#b565a7] px-2 py-1 rounded-full">
                                         {estimateTokens(scenario)} tokens
                                     </span>
                                 </div>
@@ -311,10 +310,10 @@ export const Form = () => {
                                     required
                                     value={scenario}
                                     placeholder="Outline the context and setting for your character's conversations..."
-                                    className="w-full bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:border-pink-400 focus:ring-pink-400/30 rounded-xl p-4 min-h-[120px] resize-none border"
+                                    className="w-full bg-[#b565a7]/10 border-[#b565a7]/30 text-[#b565a7] placeholder:text-[#b565a7]/50 focus:border-[#b565a7] focus:ring-[#b565a7]/30 rounded-xl p-4 min-h-[120px] resize-none border"
                                     onChange={(e)=>{setScenario(e.target.value)}}
                                 />
-                                <p className="text-sm text-white/70 bg-white/10 rounded-lg p-3">
+                                <p className="text-sm text-[#b565a7]/80 bg-[#b565a7]/10 rounded-lg p-3">
                                     🌍 Set the stage - where and when do conversations take place?
                                 </p>
                             </div>
@@ -322,24 +321,24 @@ export const Form = () => {
                     </div>
 
                     {/* Initial Message Section */}
-                    <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white shadow-lg">
+                    <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white shadow-2xl">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 bg-pink-500/30 rounded-full flex items-center justify-center">
+                            <div className="w-10 h-10 bg-[#b565a7] rounded-full flex items-center justify-center">
                                 <MessageSquare className="w-5 h-5 text-white" />
                             </div>
-                            <h2 className="text-white text-xl font-semibold">First Impression</h2>
+                            <h2 className="text-[#b565a7] text-xl font-semibold">First Impression</h2>
                         </div>
 
                         <div className="space-y-3">
-                            <Label className="text-white/90 font-medium">Initial Message</Label>
+                            <Label className="text-[#b565a7] font-medium">Initial Message</Label>
                             <textarea 
                                 required
                                 value={initialMessage}
                                 placeholder="Craft an engaging first message that showcases your character's personality..."
-                                className="w-full bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:border-pink-400 focus:ring-pink-400/30 rounded-xl p-4 min-h-[120px] resize-none border"
+                                className="w-full bg-[#b565a7]/10 border-[#b565a7]/30 text-[#b565a7] placeholder:text-[#b565a7]/50 focus:border-[#b565a7] focus:ring-[#b565a7]/30 rounded-xl p-4 min-h-[120px] resize-none border"
                                 onChange={(e)=>{setinitialMessage(e.target.value)}}
                             />
-                            <p className="text-sm text-white/70 bg-white/10 rounded-lg p-3">
+                            <p className="text-sm text-[#b565a7]/80 bg-[#b565a7]/10 rounded-lg p-3">
                                 💬 Make it detailed and engaging to encourage longer, more immersive conversations
                             </p>
                         </div>
@@ -347,10 +346,10 @@ export const Form = () => {
 
                     {/* Token Counter Display */}
                     <div className="flex justify-center">
-                        <div className="bg-white/10 backdrop-blur-sm border border-white rounded-xl px-6 py-3 flex items-center gap-3 shadow-lg">
-                            <Zap className="w-5 h-5 text-pink-400" />
-                            <span className="text-white/90 font-medium text-lg">
-                                Permanent tokens - <span className="text-pink-300 font-bold">{tokenCount}</span>
+                        <div className="bg-white/95 backdrop-blur-sm border border-white rounded-xl px-6 py-3 flex items-center gap-3 shadow-2xl">
+                            <Zap className="w-5 h-5 text-[#b565a7]" />
+                            <span className="text-[#b565a7] font-medium text-lg">
+                                Permanent tokens - <span className="text-[#b565a7] font-bold">{tokenCount}</span>
                             </span>
                         </div>
                     </div>
@@ -360,7 +359,7 @@ export const Form = () => {
                         <Button 
                         type="submit"
                         disabled={loading}
-                        className="w-full max-w-md h-14 bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-700 hover:to-pink-600 text-white font-bold text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border border-white">
+                        className="w-full max-w-md h-14 bg-[#b565a7] hover:bg-[#a555a0] text-white font-bold text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border border-white">
                             <Heart className="w-5 h-5 mr-2" />
                             {loading? "Creating...":"Create Character"}
                         </Button>

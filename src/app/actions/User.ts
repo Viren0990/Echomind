@@ -6,6 +6,8 @@ import prisma from "@/db";
 import { signupSchema } from "@/types";
 import { getServerSession } from "next-auth";
 import { NEXT_AUTH_CONFIG } from "@/lib/auth";
+import { persona } from "@/types";
+
 
 
 
@@ -40,7 +42,7 @@ export async function signup(email:string, username: string, password: string){
     }
 }
 
-export const createPersona = async (title:string, content:string) => {
+export const createPersona = async (data: persona) => {
     const session = await getServerSession(NEXT_AUTH_CONFIG);
     if (!session?.user?.id) {
         return { success: false, message: "Unauthorized" };
@@ -50,8 +52,8 @@ export const createPersona = async (title:string, content:string) => {
         const persona = await prisma.persona.create({
             data: {
                 user: { connect: { id: session.user.id } },
-                name: title,
-                content: content,
+                name: data.name,
+                content: data.content,
             },
         });
 
@@ -60,3 +62,40 @@ export const createPersona = async (title:string, content:string) => {
         return { success: false, message: "Error, Try again Later."}
     }
 }
+
+
+export const fetchUserDetails = async () => {
+  const session = await getServerSession(NEXT_AUTH_CONFIG);
+  if (!session?.user?.id) {
+    return { success: false, message: "Unauthorized" };
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        createdAt: true,
+        personas: {
+          select: {
+            id: true,
+            name: true,
+            content: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      return { success: false, message: "User not found" };
+    }
+
+    return { success: true, user };
+  } catch (error: any) {
+    console.error("Fetch User Details Error:", error);
+    return { success: false, message: "An error occurred. Please try again later." };
+  }
+};

@@ -27,3 +27,8 @@ export interface CreateCharacterInput {
   tags: TagName[];
   profilePhoto: File | null;
 }
+
+export interface persona {
+  name: string,
+  content: string,
+}
