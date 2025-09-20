@@ -28,7 +28,7 @@ model User {
 model Character {
   id              String @id @default(cuid())
   title           String
-  profilePhotoURL String?
+  profilePhotoURL String
   description     String
   personality     String // new
   scenario        String  // new

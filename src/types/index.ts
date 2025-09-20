@@ -32,3 +32,18 @@ export interface persona {
   name: string,
   content: string,
 }
+
+export interface CharacterData {
+  id: string;
+  title: string;
+  description: string;
+  personality: string;
+  scenario: string;
+  initialMessage: string;
+  profilePhotoURL: string; // ✅ match Prisma field exactly
+  user: { id: string; username: string };
+  tags: { id: string; name: string }[];
+   _count: { chats: number };
+  createdAt: Date;
+  updatedAt: Date;
+}

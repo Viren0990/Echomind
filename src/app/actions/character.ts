@@ -71,3 +71,76 @@ export const uploadCharacter = async (data: CreateCharacterInput) => {
     };
   }
 };
+
+export async function fetchAllCharacters(page: number, limit: number) {
+  try {
+    
+    const totalCount = await prisma.character.count();
+    
+    const characters = await prisma.character.findMany({
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * limit,
+      take: limit,
+      include: {
+        user: { select: { id: true, username: true } },
+        tags: { select: { id: true, name: true } },
+        _count: { select: { chats: true } },
+      },
+    });
+
+    const formatted = characters.map(({ _count, ...rest }) => ({
+      ...rest,
+      chatCount: _count?.chats ?? 0,
+    }));
+
+    return {
+      success: true,
+      characters: formatted,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalCount / limit),
+        totalCount,
+        hasNextPage: page < Math.ceil(totalCount / limit),
+        hasPrevPage: page > 1,
+      }
+    };
+  } catch (error) {
+    console.error("Error fetching characters:", error);
+    return { 
+      success: false, 
+      characters: [],
+      pagination: {
+        currentPage: 1,
+        totalPages: 0,
+        totalCount: 0,
+        hasNextPage: false,
+        hasPrevPage: false,
+      }
+    };
+  }
+}
+
+export const fetchCharacter = async (charId:string) => {
+  try{
+    const character = await prisma.character.findUnique({
+      where:{
+        id: charId
+      },
+      include: {
+        user: { select: { id: true, username: true } },
+        tags: { select: { id: true, name: true } },
+        _count: { select: { chats: true } },
+      },
+    })
+
+    return { 
+      success: true,
+      data: character
+    }
+  }catch(error){
+      return {
+        success: false,
+        data: "Error in fetching character please try again later!"
+      }
+  }
+}
