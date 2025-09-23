@@ -4,6 +4,7 @@ import { fetchChat } from "@/app/actions/chats"
 import { useState, useEffect, useRef } from "react"
 import { Send, MoreVertical, ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { createMessage } from "@/app/actions/chats"
 
 interface Message {
     id: string
@@ -16,7 +17,7 @@ interface Message {
 interface ChatData {
     id: string
     character: {
-        profilePhotoURL: string | Blob | undefined
+        profilePhotoURL: string
         id: string
         name: string
     }
@@ -57,27 +58,113 @@ export const Main = ({ id }: { id: string }) => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [chatData?.messages])
 
-    // Handle send message (placeholder - you'll need to implement the actual send function)
+    // Handle send message
     const handleSendMessage = async () => {
         if (!newMessage.trim() || sending || !chatData) return
         
+        const messageText = newMessage.trim()
+        setNewMessage("") // Clear input immediately for better UX
         setSending(true)
-        // TODO: Implement actual message sending logic
-        // For now, just add to local state
-        const tempMessage: Message = {
-            id: Date.now().toString(),
-            content: newMessage,
-            sender: "USER",
-            createdAt: new Date()
+
+        try {
+            // Optimistically add user message to UI
+            const tempUserMessage: Message = {
+                id: `temp-user-${Date.now()}`,
+                content: messageText,
+                sender: "USER",
+                createdAt: new Date(),
+                chatId: id
+            }
+
+            setChatData(prev => prev ? {
+                ...prev,
+                messages: [...prev.messages, tempUserMessage]
+            } : null)
+
+            // Add typing indicator
+            const typingMessage: Message = {
+                id: `typing-${Date.now()}`,
+                content: "Typing...",
+                sender: "AI",
+                createdAt: new Date(),
+                chatId: id
+            }
+
+            setChatData(prev => prev ? {
+                ...prev,
+                messages: [...prev.messages, typingMessage]
+            } : null)
+
+            // Send message to backend
+            const result = await createMessage(messageText, id)
+            
+            if (result.success) {
+                // Remove typing indicator and temp message, add real messages
+                setChatData(prev => {
+                    if (!prev) return null
+                    
+                    // Remove temp messages
+                    const filteredMessages = prev.messages.filter(msg => 
+                        !msg.id.startsWith('temp-') && !msg.id.startsWith('typing-')
+                    )
+                    
+                    // Add real messages from server
+                    const { userMsg, aiMsg } = result.data
+                    return {
+                        ...prev,
+                        messages: [
+                            ...filteredMessages,
+                            {
+                                id: userMsg.id,
+                                content: userMsg.content,
+                                sender: userMsg.sender as "USER" | "AI",
+                                createdAt: new Date(userMsg.createdAt),
+                                chatId: userMsg.chatId
+                            },
+                            {
+                                id: aiMsg.id,
+                                content: aiMsg.content,
+                                sender: aiMsg.sender as "USER" | "AI",
+                                createdAt: new Date(aiMsg.createdAt),
+                                chatId: aiMsg.chatId
+                            }
+                        ]
+                    }
+                })
+            } else {
+                // Remove temp messages on error
+                setChatData(prev => {
+                    if (!prev) return null
+                    return {
+                        ...prev,
+                        messages: prev.messages.filter(msg => 
+                            !msg.id.startsWith('temp-') && !msg.id.startsWith('typing-')
+                        )
+                    }
+                })
+                
+                setError("Failed to send message. Please try again.")
+                setNewMessage(messageText) // Restore message on error
+            }
+        } catch (error) {
+            console.error("Send message error:", error)
+            
+            // Remove temp messages on error
+            setChatData(prev => {
+                if (!prev) return null
+                return {
+                    ...prev,
+                    messages: prev.messages.filter(msg => 
+                        !msg.id.startsWith('temp-') && !msg.id.startsWith('typing-')
+                    )
+                }
+            })
+            
+            setError("Failed to send message. Please try again.")
+            setNewMessage(messageText) // Restore message on error
+        } finally {
+            setSending(false)
         }
-        
-        setChatData(prev => prev ? {
-            ...prev,
-            messages: [...prev.messages, tempMessage]
-        } : null)
-        
-        setNewMessage("")
-        setSending(false)
     }
 
     const formatTime = (date: Date) => {
@@ -145,7 +232,9 @@ export const Main = ({ id }: { id: string }) => {
                     </div>
                     <div>
                         <h1 className="text-white font-semibold text-lg">{chatData.character.name}</h1>
-                        <p className="text-slate-400 text-sm">Online</p>
+                        <p className={`text-sm transition-colors ${sending ? 'text-indigo-400' : 'text-slate-400'}`}>
+                            {sending ? 'Typing...' : 'Online'}
+                        </p>
                     </div>
                 </div>
 
@@ -160,7 +249,7 @@ export const Main = ({ id }: { id: string }) => {
                 {chatData.messages.length === 0 ? (
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center">
-                            <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 border-slate-600">
+                            <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 border-slate-600 mx-auto mb-4">
                                 <img 
                                     src={chatData.character.profilePhotoURL} 
                                     alt={chatData.character.name}
@@ -179,6 +268,7 @@ export const Main = ({ id }: { id: string }) => {
                     <>
                         {chatData.messages.map((message, index) => {
                             const isUser = message.sender === "USER"
+                            const isTyping = message.content === "Typing..."
                             const showTime = index === 0 || 
                                 chatData.messages[index - 1].sender !== message.sender ||
                                 (message.createdAt.getTime() - chatData.messages[index - 1].createdAt.getTime()) > 300000 // 5 minutes
@@ -187,7 +277,7 @@ export const Main = ({ id }: { id: string }) => {
                                 <div key={message.id} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`flex gap-3 max-w-[80%] ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
                                         {!isUser && (
-                                            <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 border-slate-600">
+                                            <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 border border-slate-600">
                                                 <img 
                                                     src={chatData.character.profilePhotoURL} 
                                                     alt={chatData.character.name}
@@ -200,14 +290,27 @@ export const Main = ({ id }: { id: string }) => {
                                                 className={`px-4 py-3 rounded-2xl shadow-lg ${
                                                     isUser
                                                         ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white'
+                                                        : isTyping
+                                                        ? 'bg-slate-600/50 text-slate-300 animate-pulse'
                                                         : 'bg-slate-700/80 text-slate-100 border border-slate-600/50'
                                                 }`}
                                             >
                                                 <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                                                    {message.content}
+                                                    {isTyping ? (
+                                                        <span className="flex items-center gap-1">
+                                                            Typing
+                                                            <span className="flex gap-1">
+                                                                <span className="w-1 h-1 bg-slate-300 rounded-full animate-bounce"></span>
+                                                                <span className="w-1 h-1 bg-slate-300 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></span>
+                                                                <span className="w-1 h-1 bg-slate-300 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></span>
+                                                            </span>
+                                                        </span>
+                                                    ) : (
+                                                        message.content
+                                                    )}
                                                 </p>
                                             </div>
-                                            {showTime && (
+                                            {showTime && !isTyping && (
                                                 <span className="text-xs text-slate-500 px-1">
                                                     {formatTime(message.createdAt)}
                                                 </span>
@@ -238,6 +341,7 @@ export const Main = ({ id }: { id: string }) => {
                         className="flex-1 bg-transparent text-slate-100 placeholder:text-slate-500 resize-none max-h-32 min-h-[2.5rem] py-2 px-2 focus:outline-none rounded-lg"
                         rows={1}
                         style={{ scrollbarWidth: 'none' }}
+                        disabled={sending}
                     />
                     
                     <button
@@ -249,7 +353,11 @@ export const Main = ({ id }: { id: string }) => {
                                 : 'text-slate-500 cursor-not-allowed bg-slate-600/30'
                         }`}
                     >
-                        <Send className="w-5 h-5" />
+                        {sending ? (
+                            <div className="w-5 h-5 border-2 border-slate-300 border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                            <Send className="w-5 h-5" />
+                        )}
                     </button>
                 </div>
                 

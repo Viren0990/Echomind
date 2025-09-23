@@ -4,6 +4,9 @@ import prisma from "@/db";
 import { getServerSession } from "next-auth";
 import { NEXT_AUTH_CONFIG } from "@/lib/auth";
 import OpenAI from "openai";
+import type { ChatCompletionMessageParam } from "openai/resources/chat";
+
+
 
 const openai = new OpenAI({
         baseURL: 'https://api.deepseek.com',
@@ -101,26 +104,98 @@ export const getAIResponse = async() => {
     
 }
 
-export const createMessage = async (userMessage:string,chatID:string) => {
+
+async function getLast30Messages(chatID: string) {
+    const messages = await prisma.message.findMany({
+        where: { chatId: chatID },
+        orderBy: { createdAt: "desc" }, // newest first
+        take: 30,
+    });
+
+    // Reverse so oldest comes first (DeepSeek expects chronological context)
+    return messages.reverse();
+}
+
+// 2️⃣ Helper to fetch character details
+async function getCharacterContext(chatID: string) {
+    const chat = await prisma.chat.findUnique({
+        where: { id: chatID },
+        select: {
+            character: {
+                select: {
+                    title: true,
+                    personality: true,
+                    scenario: true,
+                },
+            },
+        },
+    });
+    return chat?.character;
+}
+
+// 3️⃣ Create user message and get AI response
+export const createMessage = async (userMessage: string, chatID: string) => {
+    console.log("A");
     const session = await getServerSession(NEXT_AUTH_CONFIG);
     if (!session?.user?.id) {
-      return { success: false, data: "Not authenticated" };
+        return { success: false, data: "Not authenticated" };
     }
-    
-    try{
-        const message = await prisma.message.create({
+
+    try {
+        console.log("A");
+        // a. Save user message immediately
+        const userMsg = await prisma.message.create({
             data: {
-                chatId: chatID,             // Link to the correct chat
-                sender: "USER",             // Because this message is from the user
-                content: userMessage,       // The text the user typed
+                chatId: chatID,
+                sender: "USER",
+                content: userMessage,
             },
         });
 
 
+        // b. Prepare DeepSeek prompt
+        const character = await getCharacterContext(chatID);
+        const history = await getLast30Messages(chatID);
 
-        return { success: true, data: message };
-    }catch(error) {
+        // Create properly typed messages array
+        const deepseekMessages: ChatCompletionMessageParam[] = [
+            {
+                role: "system",
+                content: `You are roleplaying as "${character?.title}". 
+Personality: ${character?.personality}.
+Scenario: ${character?.scenario}.
+Stay in character and respond naturally.`,
+            },
+            ...history.map((m): ChatCompletionMessageParam => ({
+                role: m.sender === "USER" ? "user" : "assistant",
+                content: m.content,
+            })),
+            { role: "user", content: userMessage },
+        ];
+          
+        console.log("A");
+        // c. Send to DeepSeek - FIXED: Pass the messages array directly
+        const completion = await openai.chat.completions.create({
+            model: "deepseek-chat",
+            messages: deepseekMessages, // Pass the array directly, not wrapped in another object
+        });
+
+        const aiReply = completion.choices[0].message?.content || "…";
+        
+
+        console.log("A");
+        // d. Save AI response
+        const aiMsg = await prisma.message.create({
+            data: {
+                chatId: chatID,
+                sender: "AI",
+                content: aiReply,
+            },
+        });
+        console.log(aiMsg);
+        return { success: true, data: { userMsg, aiMsg } };
+    } catch (error) {
         console.error("createMessage error:", error);
         return { success: false, data: "Internal server error" };
     }
-}
+};
