@@ -78,6 +78,9 @@ export const Form = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        console.log(tags);
+console.log(tags.map(tag => TAGS[tag]));
+
         if(!title || !description || !tags || !personality || !scenario || !initialMessage || !profilePhoto){
             setMessage("Please fill all the required fields");
             return;

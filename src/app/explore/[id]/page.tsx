@@ -2,15 +2,19 @@ import { fetchCharacter } from "@/app/actions/character";
 import { Navbar } from "@/components/Navbar";
 import { MessageCircle, User, Calendar, Heart, Tag } from "lucide-react";
 import { CharacterData } from "@/types";
+import Link from 'next/link';
+import { ChatButton } from "@/components/explore/[id]/chatButton";
 
 export default async function Character({ params }: { params: { id: string } }) {
     const { id } = params;
     let character:CharacterData;
+    let  chatId;
 
     try {
         const result = await fetchCharacter(id);
         if (result.success && result.data && typeof result.data !== "string") {
             character = result.data;
+            chatId = result.data.existingChatId;
         } else {
             return (
                 <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
@@ -123,10 +127,9 @@ export default async function Character({ params }: { params: { id: string } }) 
                 <div className="max-w-6xl mx-auto px-8 py-16">
                     {/* Action Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                        <button className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xl font-bold py-5 px-8 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-purple-500/25 flex items-center justify-center gap-3 border border-purple-500/20">
-                            <MessageCircle className="w-6 h-6" />
-                            Start Chatting
-                        </button>
+                        
+                        <ChatButton characterId={character.id}
+                            existingChatId={chatId}/>
                         <button className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-xl font-semibold py-5 px-8 rounded-2xl border border-white/20 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-3 shadow-xl">
                             <Heart className="w-6 h-6" />
                             Add to Favorites

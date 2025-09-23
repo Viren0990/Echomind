@@ -33,7 +33,7 @@ export const uploadCharacter = async (data: CreateCharacterInput) => {
 
   try {
     // Upload profile photo if provided
-    let profilePhotoURL: string | null = null;
+    let profilePhotoURL: string = "";
     if (data.profilePhoto) {
       const uploadResult = await uploadImage(data.profilePhoto);
       profilePhotoURL = uploadResult.secure_url;
@@ -120,27 +120,52 @@ export async function fetchAllCharacters(page: number, limit: number) {
   }
 }
 
-export const fetchCharacter = async (charId:string) => {
-  try{
+
+
+export const fetchCharacter = async (charId: string) => {
+  try {
+    // 1️⃣ Get the signed-in user
+    const session = await getServerSession(NEXT_AUTH_CONFIG);
+    if (!session?.user?.id) {
+      return { success: false, data: "Not authenticated" };
+    }
+    const userId = session.user.id;
+
+    // 2️⃣ Fetch character details
     const character = await prisma.character.findUnique({
-      where:{
-        id: charId
-      },
+      where: { id: charId },
       include: {
         user: { select: { id: true, username: true } },
         tags: { select: { id: true, name: true } },
         _count: { select: { chats: true } },
       },
-    })
+    });
 
-    return { 
-      success: true,
-      data: character
+    if (!character) {
+      return { success: false, data: "Character not found" };
     }
-  }catch(error){
-      return {
-        success: false,
-        data: "Error in fetching character please try again later!"
-      }
+
+    // 3️⃣ Check if a chat already exists between this user & character
+    const existingChat = await prisma.chat.findFirst({
+      where: {
+        userId,
+        characterId: charId,
+      },
+      select: { id: true },
+    });
+
+    return {
+      success: true,
+      data: {
+        ...character,
+        existingChatId: existingChat?.id ?? null, // ✅ add chat id if present
+      },
+    };
+  } catch (error) {
+    console.error("fetchCharacter error:", error);
+    return {
+      success: false,
+      data: "Error in fetching character. Please try again later!",
+    };
   }
-}
+};
