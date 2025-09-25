@@ -1,28 +1,13 @@
 "use client"
 
-import { fetchChat } from "@/app/actions/chats"
+import { fetchChat , createMessage } from "@/app/actions/chats"
 import { useState, useEffect, useRef } from "react"
 import { Send, MoreVertical, ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { createMessage } from "@/app/actions/chats"
+import { Message, ChatData } from "@/types"
 
-interface Message {
-    id: string
-    content: string
-    sender: "USER" | "AI"
-    createdAt: Date
-    chatId?: string
-}
 
-interface ChatData {
-    id: string
-    character: {
-        profilePhotoURL: string
-        id: string
-        name: string
-    }
-    messages: Message[]
-}
+
 
 export const Main = ({ id }: { id: string }) => {
     const [chatData, setChatData] = useState<ChatData | null>(null)
@@ -33,13 +18,13 @@ export const Main = ({ id }: { id: string }) => {
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const router = useRouter()
 
-    // Fetch chat data
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const result = await fetchChat(id)
                 if (result.success) {
-                    setChatData(result.data as ChatData)
+                    setChatData(result.data as unknown as ChatData)
                 } else {
                     setError(result.data as string)
                 }
@@ -53,101 +38,98 @@ export const Main = ({ id }: { id: string }) => {
         fetchData()
     }, [id])
 
-    // Auto scroll to bottom
+    
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [chatData?.messages])
 
-    // Handle send message
+    
     const handleSendMessage = async () => {
         if (!newMessage.trim() || sending || !chatData) return
-        
+   
+    
         const messageText = newMessage.trim()
-        setNewMessage("") // Clear input immediately for better UX
+        setNewMessage("") 
         setSending(true)
 
+        if (messageText.length > 2000) {
+            setError("Message too long. Limit is 2000 characters.");
+            return;
+        }
+
         try {
-            // Optimistically add user message to UI
             const tempUserMessage: Message = {
-                id: `temp-user-${Date.now()}`,
-                content: messageText,
-                sender: "USER",
-                createdAt: new Date(),
-                chatId: id
-            }
+            id: `temp-user-${Date.now()}`,
+            content: messageText,
+            sender: "USER",
+            createdAt: new Date(),
+            chatId: id
+        }
 
-            setChatData(prev => prev ? {
-                ...prev,
-                messages: [...prev.messages, tempUserMessage]
-            } : null)
+        setChatData(prev => prev ? {
+            ...prev,
+            messages: [...prev.messages, tempUserMessage]
+        } : null)
 
-            // Add typing indicator
-            const typingMessage: Message = {
-                id: `typing-${Date.now()}`,
-                content: "Typing...",
-                sender: "AI",
-                createdAt: new Date(),
-                chatId: id
-            }
+        //  typing indicator
+        const typingMessage: Message = {
+            id: `typing-${Date.now()}`,
+            content: "Typing...",
+            sender: "AI",
+            createdAt: new Date(),
+            chatId: id
+        }
 
-            setChatData(prev => prev ? {
-                ...prev,
-                messages: [...prev.messages, typingMessage]
-            } : null)
-
-            // Send message to backend
-            const result = await createMessage(messageText, id)
+        setChatData(prev => prev ? {
+            ...prev,
+            messages: [...prev.messages, typingMessage]
+        } : null)
+ 
             
-            if (result.success) {
-                // Remove typing indicator and temp message, add real messages
-                setChatData(prev => {
-                    if (!prev) return null
-                    
-                    // Remove temp messages
-                    const filteredMessages = prev.messages.filter(msg => 
-                        !msg.id.startsWith('temp-') && !msg.id.startsWith('typing-')
-                    )
-                    
-                    // Add real messages from server
-                    const { userMsg, aiMsg } = result.data
-                    return {
-                        ...prev,
-                        messages: [
-                            ...filteredMessages,
-                            {
-                                id: userMsg.id,
-                                content: userMsg.content,
-                                sender: userMsg.sender as "USER" | "AI",
-                                createdAt: new Date(userMsg.createdAt),
-                                chatId: userMsg.chatId
-                            },
-                            {
-                                id: aiMsg.id,
-                                content: aiMsg.content,
-                                sender: aiMsg.sender as "USER" | "AI",
-                                createdAt: new Date(aiMsg.createdAt),
-                                chatId: aiMsg.chatId
-                            }
-                        ]
-                    }
-                })
-            } else {
-                // Remove temp messages on error
-                setChatData(prev => {
-                    if (!prev) return null
-                    return {
-                        ...prev,
-                        messages: prev.messages.filter(msg => 
-                            !msg.id.startsWith('temp-') && !msg.id.startsWith('typing-')
-                        )
-                    }
-                })
+        const last30 = chatData?.messages.slice(-30).map(m => ({
+            sender: m.sender,
+            content: m.content,
+        }));
+
+        const result = await createMessage(messageText, id, {personality: chatData.character.personality, scenario: chatData.character.scenario}, last30)
+        
+        if (result.success && typeof result.data === 'object') {
+            
+            const { userMsg, aiMsg } = result.data
+            
+            setChatData(prev => {
+                if (!prev) return null
                 
-                setError("Failed to send message. Please try again.")
-                setNewMessage(messageText) // Restore message on error
-            }
-        } catch (error) {
-            console.error("Send message error:", error)
+                // Remove temp messages
+                const filteredMessages = prev.messages.filter(msg => 
+                    !msg.id.startsWith('temp-') && !msg.id.startsWith('typing-')
+                )
+                
+                //  real messages from server
+                return {
+                    ...prev,
+                    messages: [
+                        ...filteredMessages,
+                        {
+                            id: userMsg.id,
+                            content: userMsg.content,
+                            sender: userMsg.sender as "USER" | "AI",
+                            createdAt: new Date(userMsg.createdAt),
+                            chatId: userMsg.chatId
+                        },
+                        {
+                            id: aiMsg.id,
+                            content: aiMsg.content,
+                            sender: aiMsg.sender as "USER" | "AI",
+                            createdAt: new Date(aiMsg.createdAt),
+                            chatId: aiMsg.chatId
+                        }
+                    ]
+                }
+            })
+        } else {
+            // Handle error case - result.data is a string error message
+            const errorMessage = typeof result.data === 'string' ? result.data : 'Failed to send message'
             
             // Remove temp messages on error
             setChatData(prev => {
@@ -160,12 +142,29 @@ export const Main = ({ id }: { id: string }) => {
                 }
             })
             
-            setError("Failed to send message. Please try again.")
+            setError(errorMessage)
             setNewMessage(messageText) // Restore message on error
-        } finally {
-            setSending(false)
         }
+    } catch (error) {
+        console.error("Send message error:", error)
+        
+        // Remove temp messages on error
+        setChatData(prev => {
+            if (!prev) return null
+            return {
+                ...prev,
+                messages: prev.messages.filter(msg => 
+                    !msg.id.startsWith('temp-') && !msg.id.startsWith('typing-')
+                )
+            }
+        })
+        
+        setError("Failed to send message. Please try again.")
+        setNewMessage(messageText) // Restore message on error
+    } finally {
+        setSending(false)
     }
+}
 
     const formatTime = (date: Date) => {
         return date.toLocaleTimeString('en-US', { 

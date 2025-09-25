@@ -141,7 +141,7 @@ export const Main = async () => {
                             <h4 className="text-lg font-medium text-slate-800 mb-2">No personas yet</h4>
                             <p className="text-slate-600 mb-6">Create your first AI persona to get started!</p>
                             <Link 
-                                href="/create"
+                                href="/createPersona"
                                 className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-3 rounded-lg transition-colors duration-200 inline-flex items-center gap-2 font-medium shadow-lg hover:shadow-xl"
                             >
                                 <Plus className="w-5 h-5" />

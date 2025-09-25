@@ -47,3 +47,30 @@ export interface CharacterData {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Message {
+    id: string
+    content: string
+    sender: "USER" | "AI"
+    createdAt: Date
+    chatId?: string
+}
+
+export interface ChatData {
+    id: string
+    character: {
+        profilePhotoURL: string
+        id: string
+        name: string
+        personality: string
+        scenario: string
+    }
+    messages: Message[]
+}
+
+export interface Char {
+    personality: string,
+    scenario: string
+}
+
+export type MessageHistory = { sender: "USER" | "AI"; content: string };
