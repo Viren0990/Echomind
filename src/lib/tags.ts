@@ -9,7 +9,7 @@ export const TAGS: Record<string, string> = {
   Smut: "cmfcefjqo0007szfwlztb10ge",
   Anime: "cmfcefk4b0008szfwwuzvogrf",
   "Dead-Dove": "cmfcefkhp0009szfwwpsxeeu3",
-  Comedy: "ccmfcefkvb000aszfw5np2lxru",
+  Comedy: "cmfcefkvb000aszfw5np2lxru",
   RPG: "cmfcefl8t000bszfw11p39ceu",
   Monster: "cmfceflmn000cszfwzhkit10v",
   Isekai: "cmfcefm0h000dszfw4h6uoaey",

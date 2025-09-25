@@ -74,7 +74,6 @@ export const uploadCharacter = async (data: CreateCharacterInput) => {
 
 export async function fetchAllCharacters(page: number, limit: number) {
   try {
-    
     const totalCount = await prisma.character.count();
     
     const characters = await prisma.character.findMany({

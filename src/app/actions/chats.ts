@@ -10,9 +10,10 @@ import { string } from "zod/v4";
 
 
 
+
 const openai = new OpenAI({
         baseURL: 'https://api.deepseek.com',
-        apiKey: 'sk-c2f83dfe070049dd8c2ad4bae36687a7'
+        apiKey:  process.env.DEEPSEEK_API,
 });
 
 export const createChat= async (charID:string) => {
