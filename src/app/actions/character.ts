@@ -73,6 +73,7 @@ export const uploadCharacter = async (data: CreateCharacterInput) => {
 };
 
 export async function fetchAllCharacters(page: number, limit: number) {
+  console.log("a");
   try {
     const totalCount = await prisma.character.count();
     
@@ -168,3 +169,31 @@ export const fetchCharacter = async (charId: string) => {
     };
   }
 };
+
+export const fetchMyCharacter = async () =>{
+  const session = await getServerSession(NEXT_AUTH_CONFIG);
+  console.log("DB URL:", process.env.DATABASE_URL?.split("@")[1]);
+  if (!session?.user?.id) {
+    return { success: false, message: "Unauthorized" };
+  }
+  try{
+
+      const totalCount = await prisma.character.count({
+        where: {creator :session?.user?.id}
+      });
+
+      const res = await prisma.character.findMany({
+        orderBy: { createdAt: "desc" },
+        where: {creator: session?.user?.id},
+        include: {
+          user: { select: { id: true, username: true } },
+          tags: { select: { id: true, name: true } },
+          _count: { select: { chats: true } },
+        },
+      });
+
+      return {success: true, characters: res, totalCount}
+  }catch(error){
+      return {success: false, chracters: [], totalCount: 0}
+  }
+}

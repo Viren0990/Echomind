@@ -1,7 +1,6 @@
 import { fetchUserDetails } from "@/app/actions/User"
 import { User, Calendar, Mail, Sparkles, Plus } from "lucide-react"
 import Link from "next/link"
-
 export const Main = async () => {
     let userData;
     
