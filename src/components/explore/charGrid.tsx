@@ -10,12 +10,12 @@ export const Grid = () => {
   const router = useRouter();
   const { pages, setPageData } = useCharacterStore();
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(!pages[1]); // ✅ if page 1 not cached
+  const [loading, setLoading] = useState(!pages[1]);
   const [error, setError] = useState<string | null>(null);
   const CHARACTERS_PER_PAGE = 10;
 
   const fetchCharacters = async (page: number) => {
-    if (pages[page]) return; // ✅ Already cached → skip fetching
+    if (pages[page]) return;
 
     setLoading(true);
     setError(null);
@@ -35,15 +35,23 @@ export const Grid = () => {
   };
 
   useEffect(() => {
-    // ✅ Load page 1 on first visit
     if (!pages[1]) fetchCharacters(1);
   }, []);
 
   const handlePageChange = (page: number) => {
     if (page < 1) return;
     setCurrentPage(page);
-    fetchCharacters(page); // ✅ Only fetch if not cached
+    fetchCharacters(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Helper function to truncate description to 20 words
+  const truncateDescription = (text: string, wordLimit: number = 20) => {
+    const words = text.split(' ');
+    if (words.length <= wordLimit) {
+      return text;
+    }
+    return words.slice(0, wordLimit).join(' ') + '...';
   };
 
   const getPageNumbers = () => {
@@ -73,17 +81,23 @@ export const Grid = () => {
       {/* Error Message */}
       {error && (
         <div className="max-w-4xl mx-auto mb-6">
-          <div className="bg-red-500/20 border border-red-400/50 text-red-100 p-4 rounded-xl text-center">
+          <div className="bg-red-500/20 border border-red-400/50 text-red-100 p-4 rounded-xl text-center backdrop-blur-sm">
             {error}
           </div>
         </div>
       )}
 
       <div className="max-w-7xl mx-auto">
+        {/* Loading State */}
         {loading && !currentData && (
           <div className="flex flex-col items-center justify-center py-16">
             <div className="w-16 h-16 rounded-full border-4 border-indigo-500 border-t-white animate-spin mb-6"></div>
-            <div className="text-center text-white text-2xl font-semibold">Loading...</div>
+            <div className="text-center text-white text-2xl font-semibold tracking-wide">
+              Loading<span className="animate-pulse">...</span>
+            </div>
+            <div className="text-slate-300 mt-2 text-sm">
+              Please wait while we fetch the latest characters for you!
+            </div>
           </div>
         )}
 
@@ -94,33 +108,57 @@ export const Grid = () => {
               <button
                 key={character.id}
                 onClick={() => router.push(`/explore/${character.id}`)}
-                className="bg-white/95 rounded-2xl border border-white/20 shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 hover:scale-105"
+                className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 hover:scale-105 cursor-pointer group flex flex-col h-full hover:bg-white"
               >
-                {/* Image */}
-                <div className="relative w-full h-48 rounded-t-2xl overflow-hidden">
+                {/* Character Image */}
+                <div className="relative w-full h-48 rounded-t-2xl overflow-hidden flex-shrink-0">
                   <img
                     src={character.profilePhotoURL}
                     alt={character.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 
-                {/* Info */}
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-slate-800 mb-2">{character.title}</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">
-                    {character.description.slice(0, 60)}...
-                  </p>
+                {/* Character Info */}
+                <div className="p-4 flex flex-col flex-grow">
+                  {/* Title */}
+                  <h3 className="text-lg font-bold text-slate-800 mb-2 line-clamp-1 group-hover:text-indigo-600 transition-colors">
+                    {character.title}
+                  </h3>
+
+                  {/* Description */}
+                  <div className="flex-grow mb-3">
+                    <p className="text-slate-600 text-sm leading-relaxed h-10 overflow-hidden">
+                      {truncateDescription(character.description, 20)}
+                    </p>
+                  </div>
+
+                  {/* Footer Info */}
+                  <div className="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-200 mt-auto">
+                    <div className="flex items-center gap-1">
+                      <User className="w-3 h-3" />
+                      <span className="truncate">{character.user.username}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <MessageCircle className="w-3 h-3" />
+                      <span>{character.chatCount || 0}</span>
+                    </div>
+                  </div>
                 </div>
               </button>
             ))}
           </div>
         ) : (
-          !loading &&
-          !error && (
+          !loading && !error && (
             <div className="text-center py-16">
-              <Sparkles className="w-12 h-12 text-white/60 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-white mb-2">No Characters Yet</h3>
+              <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+                <Sparkles className="w-12 h-12 text-white/60" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">No Characters Yet</h3>
+              <p className="text-slate-300 text-lg max-w-md mx-auto">
+                Be the first to create an amazing character for the community to discover!
+              </p>
             </div>
           )
         )}
@@ -128,38 +166,54 @@ export const Grid = () => {
 
       {/* Pagination */}
       {currentData && currentData.pagination.totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-8">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={!currentData.pagination.hasPrevPage}
-            className="px-4 py-2 rounded bg-white/80"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
+        <div className="flex flex-col items-center mt-12 space-y-4">
+          {/* Page Info */}
+          <div className="text-slate-400 text-sm">
+            Showing {((currentData.pagination.currentPage - 1) * CHARACTERS_PER_PAGE) + 1} to {Math.min(currentData.pagination.currentPage * CHARACTERS_PER_PAGE, currentData.pagination.totalCount)} of {currentData.pagination.totalCount} characters
+          </div>
+          
+          {/* Pagination Controls */}
+          <div className="flex items-center gap-2">
+            {/* Previous Button */}
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={!currentData.pagination.hasPrevPage}
+              className="bg-white/95 hover:bg-white text-slate-700 font-semibold px-4 py-2 rounded-xl shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 hover:scale-105 border border-white/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
 
-          {getPageNumbers().map((p, idx) =>
-            p === "..." ? (
-              <span key={idx}>...</span>
-            ) : (
-              <button
-                key={idx}
-                onClick={() => handlePageChange(p as number)}
-                className={`px-4 py-2 rounded ${
-                  p === currentPage ? "bg-indigo-600 text-white" : "bg-white/80"
-                }`}
-              >
-                {p}
-              </button>
-            )
-          )}
+            {/* Page Numbers */}
+            <div className="flex items-center gap-1">
+              {getPageNumbers().map((page, index) => (
+                <div key={index}>
+                  {page === '...' ? (
+                    <span className="px-3 py-2 text-slate-400">...</span>
+                  ) : (
+                    <button
+                      onClick={() => handlePageChange(page as number)}
+                      className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 border ${
+                        page === currentData.pagination.currentPage
+                          ? 'bg-indigo-600 text-white border-indigo-500 shadow-2xl shadow-indigo-500/25'
+                          : 'bg-white/95 hover:bg-white text-slate-700 border-white/50 shadow-2xl hover:shadow-indigo-500/20 hover:scale-105'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
 
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={!currentData.pagination.hasNextPage}
-            className="px-4 py-2 rounded bg-white/80"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
+            {/* Next Button */}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={!currentData.pagination.hasNextPage}
+              className="bg-white/95 hover:bg-white text-slate-700 font-semibold px-4 py-2 rounded-xl shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 hover:scale-105 border border-white/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
     </div>

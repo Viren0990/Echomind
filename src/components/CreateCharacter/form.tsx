@@ -9,6 +9,7 @@ import { Upload, Heart, User, MessageSquare, Settings, CheckCircle, X, Zap } fro
 import { useState, useEffect } from "react";
 import { uploadCharacter } from "@/app/actions/character";
 import Image from "next/image";
+import { useMyCharacterStore } from "@/store/useMyCharacterStore";
 
 export const Form = () => {
     const [title, setTitle] = useState("");
@@ -91,6 +92,7 @@ console.log(tags.map(tag => TAGS[tag]));
         try{
             const res = await uploadCharacter({title,description,personality,scenario,initialMessage, profilePhoto, tags});
             if(res.success){
+                useMyCharacterStore.getState().clearCache();
                 setMessage("Character Created Successfully!");
                 setTitle("");
                 setDescription("");

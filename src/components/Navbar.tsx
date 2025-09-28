@@ -24,12 +24,12 @@ export const Navbar = () => {
     { href: "/explore", label: "Explore" },
     { href: "/myCharacters", label: "My-Characters" },
     { href: "/createCharacter", label: "Create-Characters"},
+    { href: "/profile", label: "Profile"}
   ];
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-transparent backdrop-blur-md">
       <div className="flex h-12 items-center justify-between pr-2">
-        {/* Logo */}
         <div className="inline-flex justify-center items-center">
                 <div>
                     <Image

@@ -73,7 +73,7 @@ export const uploadCharacter = async (data: CreateCharacterInput) => {
 };
 
 export async function fetchAllCharacters(page: number, limit: number) {
-  console.log("a");
+
   try {
     const totalCount = await prisma.character.count();
     
@@ -185,12 +185,22 @@ export const fetchMyCharacter = async () =>{
       const res = await prisma.character.findMany({
         orderBy: { createdAt: "desc" },
         where: {creator: session?.user?.id},
-        include: {
-          user: { select: { id: true, username: true } },
-          tags: { select: { id: true, name: true } },
-          _count: { select: { chats: true } },
-        },
+        select: {
+          id: true,
+          title: true,
+          profilePhotoURL: true,
+          description: true,
+          createdAt: true,
+          updatedAt: true,
+          creator: true,
+
+          user: {select: {id: true, username: true}},
+          tags: {select: {id: true, name: true}},
+          _count: {select: {chats:true}},
+        }
       });
+
+      
 
       return {success: true, characters: res, totalCount}
   }catch(error){

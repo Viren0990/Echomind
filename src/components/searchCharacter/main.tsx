@@ -19,31 +19,8 @@ export const Main = () => {
                 </p>
             </div>
 
-            {/* Search Section */}
-            <div className="max-w-3xl mx-auto">
-                <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-white shadow-2xl">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 bg-[#b565a7] rounded-full flex items-center justify-center">
-                            <Search className="w-5 h-5 text-white" />
-                        </div>
-                        <h2 className="text-[#b565a7] text-xl font-semibold">Find Your Perfect Character</h2>
-                    </div>
-                    
-                    <div className="relative">
-                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#b565a7]/50" />
-                        <Input 
-                            className="bg-[#b565a7]/10 border-[#b565a7]/30 text-[#b565a7] placeholder:text-[#b565a7]/50 focus:border-[#b565a7] focus:ring-[#b565a7]/30 h-14 rounded-xl pl-12 text-lg font-medium"
-                            placeholder="Search by name, personality, or tags..."
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-7 gap-6">
-                    
-                </div>
-            </div>
+            
+           
         </div>
     )
 }

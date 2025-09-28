@@ -3,10 +3,10 @@
 
 import bcrypt from "bcrypt";
 import prisma from "@/db";
-import { signupSchema } from "@/types";
+import { signupSchema, persona } from "@/types";
 import { getServerSession } from "next-auth";
 import { NEXT_AUTH_CONFIG } from "@/lib/auth";
-import { persona } from "@/types";
+
 
 
 
