@@ -1,6 +1,7 @@
 import qwq from "@/images/qwq.png";
 import { Navbar } from "@/components/Navbar";
 import Image from 'next/image';
+import Link from "next/link";
 
 export const Hero = () => {
     return(
@@ -41,16 +42,16 @@ export const Hero = () => {
                         {/* CTA Buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
                             <button className="group bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full text-lg transition-all duration-300 shadow-2xl hover:shadow-indigo-500/25 hover:scale-105 border-2 border-white/20">
-                                <span className="flex items-center justify-center gap-2">
+                                <Link href="/explore" className="flex items-center justify-center gap-2">
                                     Start Your Adventure
                                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"/>
                                     </svg>
-                                </span>
+                                </Link>
                             </button>
-                            <button className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-full text-lg transition-all duration-300 shadow-xl border-2 border-white/30 hover:border-white/50">
-                                Explore Characters
-                            </button>
+                            <Link href="/createCharacter" className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-full text-lg transition-all duration-300 shadow-xl border-2 border-white/30 hover:border-white/50">
+                                Create your own character
+                            </Link>
                         </div>
                         
                         {/* Stats */}

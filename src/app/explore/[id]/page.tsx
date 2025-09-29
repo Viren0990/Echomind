@@ -4,9 +4,10 @@ import { MessageCircle, User, Calendar, Heart, Tag } from "lucide-react";
 import { CharacterData } from "@/types";
 import Link from 'next/link';
 import { ChatButton } from "@/components/explore/[id]/chatButton";
+import { BackButton } from "@/components/explore/[id]/BackButton";
 
-export default async function Character({ params }: { params: { id: string } }) {
-    const { id } = params;
+export default async function Character({ params }: Readonly<{ params: { id: string } }>) {
+    const { id } = await params;
     let character:CharacterData;
     let  chatId;
 
@@ -48,7 +49,7 @@ export default async function Character({ params }: { params: { id: string } }) 
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-            <Navbar />
+            <BackButton />
             
             {/* Hero Section with Character Image */}
             <div className="relative h-[75vh] overflow-hidden">

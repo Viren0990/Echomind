@@ -74,3 +74,15 @@ export interface Char {
 }
 
 export type MessageHistory = { sender: "USER" | "AI"; content: string };
+
+export interface ChatItem {
+  id: string;
+  character: {
+    profilePhotoURL: string;
+    id: string;
+    title: string;
+  };
+  _count: {
+    messages: number;
+  };
+}

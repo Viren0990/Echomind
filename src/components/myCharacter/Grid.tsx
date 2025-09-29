@@ -16,7 +16,7 @@ export const Grid = () => {
             setLoading(true);
             setError(null);
             const res = await fetchMyCharacter();
-            
+        
             if (!res.success || !res.characters || res.totalCount === undefined) {
                 setError("Failed to load characters");
                 setMyCharacters([], 0); // ✅ Use Zustand setter

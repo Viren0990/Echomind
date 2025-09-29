@@ -181,3 +181,30 @@ export const createMessage = async (userMessage: string, chatID: string, charact
         return { success: false, data: "Internal server error" };
     }
 };
+
+export const fetchMyChats = async () => {
+    const session = await getServerSession(NEXT_AUTH_CONFIG);
+    if (!session?.user?.id) {
+        return { success: false, data: "Not authenticated" };
+    }
+
+    try{
+        const res = await prisma.chat.findMany({
+            where: {userId:session?.user?.id},
+            select: {
+                id: true,
+                character: {select: {id:true, title:true, profilePhotoURL:true}},
+                _count: {
+                    select: { messages: true }, 
+                },
+            },
+            orderBy: {
+                createdAt: "desc", 
+            },
+        });
+
+        return {success:true, data: res};
+    }catch(error){
+        return {success:false, data: "Server Error"};
+    }
+}

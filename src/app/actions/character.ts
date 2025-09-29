@@ -181,7 +181,7 @@ export const fetchMyCharacter = async () =>{
       const totalCount = await prisma.character.count({
         where: {creator :session?.user?.id}
       });
-
+      
       const res = await prisma.character.findMany({
         orderBy: { createdAt: "desc" },
         where: {creator: session?.user?.id},

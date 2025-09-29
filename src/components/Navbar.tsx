@@ -23,8 +23,9 @@ export const Navbar = () => {
     { href: "/landing", label: "Home" },
     { href: "/explore", label: "Explore" },
     { href: "/myCharacters", label: "My-Characters" },
+    { href: "/myChats", label: "My-Chats" },
     { href: "/createCharacter", label: "Create-Characters"},
-    { href: "/profile", label: "Profile"}
+    { href: "/profile", label: "My-Profile"}
   ];
 
   return (
