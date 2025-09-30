@@ -1,21 +1,6 @@
 import { create } from "zustand";
-
-interface myCharacter {
-    id: string;
-    title: string;
-    profilePhotoURL: string;
-    description: string;
-    user: { id: string; username: string };
-    tags: { id: string; name: string }[];
-    _count: { chats: number };
-}
-
-interface myCharacterStore {
-    characters: myCharacter[] | null;
-    totalCount: number;
-    setMyCharacters: (chars: myCharacter[], count: number) => void;
-    clearCache: ()=>void
-}
+import { myCharacter } from "@/types";
+import {myCharacterStore} from "@/types"
 
 export const useMyCharacterStore = create<myCharacterStore>((set)=>({
     characters: null,

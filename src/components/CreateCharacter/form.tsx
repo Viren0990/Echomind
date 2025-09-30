@@ -24,12 +24,12 @@ export const Form = () => {
     const [message, setMessage] = useState("");
     const [tokenCount, setTokenCount] = useState(0);
 
-    // Token estimation function (OpenAI's rule: ~4 characters per token)
+    
     const estimateTokens = (text: string) => {
         return Math.ceil(text.length / 4);
     };
 
-    // Update token count when personality or scenario changes
+    
     useEffect(() => {
         const personalityTokens = estimateTokens(personality);
         const scenarioTokens = estimateTokens(scenario);
@@ -71,16 +71,13 @@ export const Form = () => {
     const removeImage = () => {
         setProfilePhoto(null);
         setImagePreview(null);
-        // Reset the file input
+      
         const fileInput = document.getElementById('character-image') as HTMLInputElement;
         if (fileInput) fileInput.value = '';
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        console.log(tags);
-console.log(tags.map(tag => TAGS[tag]));
 
         if(!title || !description || !tags || !personality || !scenario || !initialMessage || !profilePhoto){
             setMessage("Please fill all the required fields");
@@ -114,7 +111,6 @@ console.log(tags.map(tag => TAGS[tag]));
 
     return(
         <div className="pt-10 px-6 pb-8 md:px-20 lg:px-32">
-            {/* Header Section */}
             <div className="text-center mb-12">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
                     Create a Character!
@@ -124,7 +120,6 @@ console.log(tags.map(tag => TAGS[tag]));
                 </p>
             </div>
 
-            {/* Success/Error Message */}
             {message && (
                 <div className={`max-w-4xl mx-auto mb-6 p-4 rounded-xl backdrop-blur-sm ${
                     message.includes("Successfully") 
@@ -137,7 +132,7 @@ console.log(tags.map(tag => TAGS[tag]));
 
             <div className="max-w-4xl mx-auto">
                 <form className="space-y-8" onSubmit={handleSubmit}>
-                    {/* Image Upload Section */}
+                
                     <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center">
@@ -211,7 +206,6 @@ console.log(tags.map(tag => TAGS[tag]));
                         </div>
                     </div>
 
-                    {/* Basic Info Section */}
                     <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center">
@@ -248,7 +242,7 @@ console.log(tags.map(tag => TAGS[tag]));
                         </div>
                     </div>
 
-                    {/* Tags Section */}
+                    
                     <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center">
@@ -275,7 +269,7 @@ console.log(tags.map(tag => TAGS[tag]));
                         </div>
                     </div>
 
-                    {/* Character Definition Section */}
+                  
                     <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center">
@@ -326,7 +320,7 @@ console.log(tags.map(tag => TAGS[tag]));
                         </div>
                     </div>
 
-                    {/* Initial Message Section */}
+                  
                     <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center">
@@ -350,7 +344,7 @@ console.log(tags.map(tag => TAGS[tag]));
                         </div>
                     </div>
 
-                    {/* Token Counter Display */}
+                   
                     <div className="flex justify-center">
                         <div className="bg-white/95 backdrop-blur-sm border border-white/20 rounded-xl px-6 py-3 flex items-center gap-3 shadow-2xl">
                             <Zap className="w-5 h-5 text-slate-600" />
@@ -360,7 +354,7 @@ console.log(tags.map(tag => TAGS[tag]));
                         </div>
                     </div>
 
-                    {/* Submit Button */}
+        
                     <div className="flex justify-center pt-6">
                         <Button 
                         type="submit"

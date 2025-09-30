@@ -30,9 +30,9 @@ model Character {
   title           String
   profilePhotoURL String
   description     String
-  personality     String // new
-  scenario        String  // new
-  initialMessage  String  // new
+  personality     String
+  scenario        String  
+  initialMessage  String  
   tags            Tag[]      @relation("CharacterTags")
   chats           Chat[]
   user            User      @relation(fields: [creator], references: [id])
@@ -59,7 +59,7 @@ model Chat {
 
 model Message {
   id        String   @id @default(cuid())
-  chat      Chat     @relation(fields: [chatId], references: [id])
+  chat      Chat      @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId    String
   sender    Sender
   content   String

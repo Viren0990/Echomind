@@ -71,7 +71,7 @@ export const Main = ({ id }: { id: string }) => {
             messages: [...prev.messages, tempUserMessage]
         } : null)
 
-        //  typing indicator
+        
         const typingMessage: Message = {
             id: `typing-${Date.now()}`,
             content: "Typing...",
@@ -98,14 +98,12 @@ export const Main = ({ id }: { id: string }) => {
             const { userMsg, aiMsg } = result.data
             
             setChatData(prev => {
-                if (!prev) return null
-                
-                // Remove temp messages
+                if (!prev) return null;
+
                 const filteredMessages = prev.messages.filter(msg => 
                     !msg.id.startsWith('temp-') && !msg.id.startsWith('typing-')
                 )
                 
-                //  real messages from server
                 return {
                     ...prev,
                     messages: [
@@ -128,10 +126,7 @@ export const Main = ({ id }: { id: string }) => {
                 }
             })
         } else {
-            // Handle error case - result.data is a string error message
             const errorMessage = typeof result.data === 'string' ? result.data : 'Failed to send message'
-            
-            // Remove temp messages on error
             setChatData(prev => {
                 if (!prev) return null
                 return {
@@ -143,12 +138,10 @@ export const Main = ({ id }: { id: string }) => {
             })
             
             setError(errorMessage)
-            setNewMessage(messageText) // Restore message on error
+            setNewMessage(messageText) 
         }
     } catch (error) {
-        console.error("Send message error:", error)
-        
-        // Remove temp messages on error
+
         setChatData(prev => {
             if (!prev) return null
             return {
@@ -160,7 +153,7 @@ export const Main = ({ id }: { id: string }) => {
         })
         
         setError("Failed to send message. Please try again.")
-        setNewMessage(messageText) // Restore message on error
+        setNewMessage(messageText) 
     } finally {
         setSending(false)
     }
@@ -210,9 +203,7 @@ export const Main = ({ id }: { id: string }) => {
 
     return (
         <div className="flex flex-col h-screen w-full bg-slate-900">
-            {/* Chat Header */}
             <div className="bg-slate-800/95 backdrop-blur-sm border-b border-slate-700/50 p-4 flex items-center gap-3">
-                {/* Back Button */}
                 <button 
                     onClick={handleBackClick}
                     className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
@@ -220,7 +211,6 @@ export const Main = ({ id }: { id: string }) => {
                     <ArrowLeft className="w-5 h-5" />
                 </button>
                 
-                {/* Character Info */}
                 <div className="flex items-center gap-3 flex-1">
                     <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 border-slate-600">
                         <img 
@@ -237,13 +227,11 @@ export const Main = ({ id }: { id: string }) => {
                     </div>
                 </div>
 
-                {/* More Options */}
                 <button className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors">
                     <MoreVertical className="w-5 h-5" />
                 </button>
             </div>
 
-            {/* Messages Container */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ scrollbarWidth: 'thin' }}>
                 {chatData.messages.length === 0 ? (
                     <div className="flex items-center justify-center h-full">
@@ -324,7 +312,7 @@ export const Main = ({ id }: { id: string }) => {
                 )}
             </div>
 
-            {/* Message Input */}
+           
             <div className="bg-slate-800/95 backdrop-blur-sm border-t border-slate-700/50 p-4">
                 <div className="bg-slate-700/50 rounded-2xl border border-slate-600/50 flex items-end gap-2 p-3">
                     <textarea

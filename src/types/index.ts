@@ -37,9 +37,6 @@ export interface CharacterData {
   id: string;
   title: string;
   description: string;
-  personality: string;
-  scenario: string;
-  initialMessage: string;
   profilePhotoURL: string; // ✅ match Prisma field exactly
   user: { id: string; username: string };
   tags: { id: string; name: string }[];
@@ -85,4 +82,30 @@ export interface ChatItem {
   _count: {
     messages: number;
   };
+}
+
+export interface Pagination {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
+
+export interface myCharacter {
+    id: string;
+    title: string;
+    profilePhotoURL: string;
+    description: string;
+    user: { id: string; username: string };
+    tags: { id: string; name: string }[];
+    _count: { chats: number };
+}
+
+export interface myCharacterStore {
+    characters: myCharacter[] | null;
+    totalCount: number;
+    setMyCharacters: (chars: myCharacter[], count: number) => void;
+    clearCache: ()=>void
 }

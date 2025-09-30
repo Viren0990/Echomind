@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import { useMyCharacterStore } from "@/store/useMyCharacterStore";
 
 export const Grid = () => {
-    const { characters, totalCount, setMyCharacters } = useMyCharacterStore(); // ✅ Use hook, not getState()
-    const [loading, setLoading] = useState(!characters); // ✅ Only load if no cache
+    const { characters, totalCount, setMyCharacters } = useMyCharacterStore(); 
+    const [loading, setLoading] = useState(!characters); 
     const [error, setError] = useState<string | null>(null);
     
     const fetchMyChar = async () => {
@@ -19,21 +19,21 @@ export const Grid = () => {
         
             if (!res.success || !res.characters || res.totalCount === undefined) {
                 setError("Failed to load characters");
-                setMyCharacters([], 0); // ✅ Use Zustand setter
+                setMyCharacters([], 0); 
             } else {
-                setMyCharacters(res.characters, res.totalCount); // ✅ Use Zustand setter
+                setMyCharacters(res.characters, res.totalCount);
             }
         } catch (error) {
             console.error("Error fetching characters:", error);
             setError("Something went wrong while fetching your characters");
-            setMyCharacters([], 0); // ✅ Use Zustand setter
+            setMyCharacters([], 0); 
         } finally {
             setLoading(false);
         }
     }
 
     useEffect(() => {
-        if (!characters) { // ✅ Only fetch if not cached
+        if (!characters) {
             fetchMyChar();
         }
     }, [characters])
@@ -145,8 +145,6 @@ export const Grid = () => {
                                             </p>
                                         </div>
 
-            
-                                        {/* Footer Info */}
                                         <div className="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-200 mt-auto">
                                             <div className="flex items-center gap-1">
                                                 <User className="w-3 h-3" />
@@ -163,8 +161,7 @@ export const Grid = () => {
                         ))}
                     </div>
                 )}
-
-                
+                                
                 {totalCount > 0 && (
                     <div className="text-center mt-12">
                         <Link 

@@ -45,8 +45,8 @@ export const Grid = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Helper function to truncate description to 20 words
-  const truncateDescription = (text: string, wordLimit: number = 20) => {
+
+  const truncateDescription = (text: string, wordLimit: number = 30) => {
     const words = text.split(' ');
     if (words.length <= wordLimit) {
       return text;
@@ -58,7 +58,6 @@ export const Grid = () => {
     const currentPagination = pages[currentPage]?.pagination;
     if (!currentPagination) return [];
     const { totalPages } = currentPagination;
-
     const pagesArr = [];
     if (currentPage > 3) {
       pagesArr.push(1);
@@ -78,7 +77,6 @@ export const Grid = () => {
 
   return (
     <div>
-      {/* Error Message */}
       {error && (
         <div className="max-w-4xl mx-auto mb-6">
           <div className="bg-red-500/20 border border-red-400/50 text-red-100 p-4 rounded-xl text-center backdrop-blur-sm">
@@ -88,7 +86,6 @@ export const Grid = () => {
       )}
 
       <div className="max-w-7xl mx-auto">
-        {/* Loading State */}
         {loading && !currentData && (
           <div className="flex flex-col items-center justify-center py-16">
             <div className="w-16 h-16 rounded-full border-4 border-indigo-500 border-t-white animate-spin mb-6"></div>
@@ -101,7 +98,6 @@ export const Grid = () => {
           </div>
         )}
 
-        {/* Characters Grid */}
         {!loading && currentData?.characters.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {currentData.characters.map((character: any) => (
@@ -110,7 +106,6 @@ export const Grid = () => {
                 onClick={() => router.push(`/explore/${character.id}`)}
                 className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 hover:scale-105 cursor-pointer group flex flex-col h-full hover:bg-white"
               >
-                {/* Character Image */}
                 <div className="relative w-full h-48 rounded-t-2xl overflow-hidden flex-shrink-0">
                   <img
                     src={character.profilePhotoURL}
@@ -120,21 +115,17 @@ export const Grid = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 
-                {/* Character Info */}
                 <div className="p-4 flex flex-col flex-grow">
-                  {/* Title */}
                   <h3 className="text-lg font-bold text-slate-800 mb-2 line-clamp-1 group-hover:text-indigo-600 transition-colors">
                     {character.title}
                   </h3>
 
-                  {/* Description */}
                   <div className="flex-grow mb-3">
                     <p className="text-slate-600 text-sm leading-relaxed h-10 overflow-hidden">
                       {truncateDescription(character.description, 20)}
                     </p>
                   </div>
 
-                  {/* Footer Info */}
                   <div className="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-200 mt-auto">
                     <div className="flex items-center gap-1">
                       <User className="w-3 h-3" />
@@ -164,17 +155,16 @@ export const Grid = () => {
         )}
       </div>
 
-      {/* Pagination */}
       {currentData && currentData.pagination.totalPages > 1 && (
         <div className="flex flex-col items-center mt-12 space-y-4">
-          {/* Page Info */}
+        
           <div className="text-slate-400 text-sm">
             Showing {((currentData.pagination.currentPage - 1) * CHARACTERS_PER_PAGE) + 1} to {Math.min(currentData.pagination.currentPage * CHARACTERS_PER_PAGE, currentData.pagination.totalCount)} of {currentData.pagination.totalCount} characters
           </div>
           
-          {/* Pagination Controls */}
+         
           <div className="flex items-center gap-2">
-            {/* Previous Button */}
+         
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={!currentData.pagination.hasPrevPage}
@@ -183,7 +173,7 @@ export const Grid = () => {
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            {/* Page Numbers */}
+       
             <div className="flex items-center gap-1">
               {getPageNumbers().map((page, index) => (
                 <div key={index}>
@@ -205,7 +195,7 @@ export const Grid = () => {
               ))}
             </div>
 
-            {/* Next Button */}
+            
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={!currentData.pagination.hasNextPage}

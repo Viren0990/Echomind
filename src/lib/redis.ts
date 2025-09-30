@@ -1,16 +1,6 @@
-import Redis from "ioredis";
+import { Redis } from "@upstash/redis";
 
-const redis = new Redis({
-  host: "127.0.0.1",  // Memurai default host
-  port: 6379,         // Memurai default port
+export const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
-
-redis.on("connect", () => {
-  console.log("✅ Connected to Redis");
-});
-
-redis.on("error", (err) => {
-  console.error("Redis error:", err);
-});
-
-export default redis;

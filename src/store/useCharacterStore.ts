@@ -1,15 +1,8 @@
 import { create } from "zustand";
-
-interface Pagination {
-  currentPage: number;
-  totalPages: number;
-  totalCount: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-}
+import { Pagination } from "@/types";
 
 interface CharacterStore {
-  pages: Record<number, { characters: any[]; pagination: Pagination }>; // ✅ cache by page
+  pages: Record<number, { characters: any[]; pagination: Pagination }>; 
   setPageData: (page: number, characters: any[], pagination: Pagination) => void;
   clearCache: () => void;
 }
@@ -21,7 +14,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     set((state) => ({
       pages: {
         ...state.pages,
-        [page]: { characters, pagination }, // ✅ Store page-specific cache
+        [page]: { characters, pagination }, 
       },
     })),
 

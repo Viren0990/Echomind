@@ -10,7 +10,7 @@ export default async function Character({ params }: Readonly<{ params: { id: str
     const { id } = await params;
     let character:CharacterData;
     let  chatId;
-
+    
     try {
         const result = await fetchCharacter(id);
         if (result.success && result.data && typeof result.data !== "string") {
@@ -51,7 +51,6 @@ export default async function Character({ params }: Readonly<{ params: { id: str
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
             <BackButton />
             
-            {/* Hero Section with Character Image */}
             <div className="relative h-[75vh] overflow-hidden">
                 {/* Background Image - Fixed cropping issues */}
                 <div className="absolute inset-0">
@@ -64,16 +63,15 @@ export default async function Character({ params }: Readonly<{ params: { id: str
                             minHeight: '100%'
                         }}
                     />
-                    {/* Enhanced Overlay Gradient */}
+              
                     <div className="absolute inset-0 bg-gradient-to-b from-slate-900/30 via-slate-900/60 to-slate-900/90"></div>
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 via-transparent to-indigo-900/20"></div>
                 </div>
                 
-                {/* Character Info Overlay */}
+               
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                     <div className="max-w-6xl mx-auto">
                         <div className="flex flex-col md:flex-row md:items-end gap-6">
-                            {/* Character Avatar */}
                             <div className="flex-shrink-0 mx-auto md:mx-0">
                                 <div className="w-36 h-36 md:w-40 md:h-40 rounded-3xl overflow-hidden border-4 border-white/80 shadow-2xl backdrop-blur-sm">
                                     <img
@@ -84,13 +82,11 @@ export default async function Character({ params }: Readonly<{ params: { id: str
                                 </div>
                             </div>
                             
-                            {/* Character Details */}
+                            
                             <div className="flex-grow text-center md:text-left text-white pb-2">
                                 <h1 className="text-4xl md:text-6xl font-black mb-4 drop-shadow-2xl bg-gradient-to-r from-white via-purple-100 to-indigo-100 bg-clip-text text-transparent">
                                     {character.title}
                                 </h1>
-                                
-                                {/* Tags */}
                                 <div className="flex flex-wrap gap-3 mb-6 justify-center md:justify-start">
                                     {character.tags?.map((tag: any) => (
                                         <span
@@ -101,8 +97,7 @@ export default async function Character({ params }: Readonly<{ params: { id: str
                                         </span>
                                     ))}
                                 </div>
-                                
-                                {/* Metadata */}
+
                                 <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 text-white/90 text-sm font-medium justify-center md:justify-start">
                                     <div className="flex items-center gap-2 justify-center md:justify-start">
                                         <User className="w-4 h-4" />
@@ -123,10 +118,10 @@ export default async function Character({ params }: Readonly<{ params: { id: str
                 </div>
             </div>
             
-            {/* Content Section */}
+            
             <div className="bg-gradient-to-b from-slate-900 to-slate-800 min-h-[25vh]">
                 <div className="max-w-6xl mx-auto px-8 py-16">
-                    {/* Action Buttons */}
+                 
                     <div className="flex flex-col sm:flex-row gap-4 mb-12">
                         
                         <ChatButton characterId={character.id}
@@ -137,7 +132,7 @@ export default async function Character({ params }: Readonly<{ params: { id: str
                         </button>
                     </div>
                     
-                    {/* Additional Info Cards */}
+                
                     <div className="grid md:grid-cols-2 gap-8">
                         <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/10">
                             <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">

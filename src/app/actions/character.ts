@@ -26,13 +26,11 @@ const uploadImage = async (file: File) => {
 
 export const uploadCharacter = async (data: CreateCharacterInput) => {
   const session = await getServerSession(NEXT_AUTH_CONFIG);
-  console.log("DB URL:", process.env.DATABASE_URL?.split("@")[1]);
   if (!session?.user?.id) {
     return { success: false, message: "Unauthorized" };
   }
 
   try {
-    // Upload profile photo if provided
     let profilePhotoURL: string = "";
     if (data.profilePhoto) {
       const uploadResult = await uploadImage(data.profilePhoto);
@@ -40,15 +38,14 @@ export const uploadCharacter = async (data: CreateCharacterInput) => {
     }
 
     if (!data.tags.every(tag => TAGS[tag])) {
-  throw new Error("Invalid tag detected");
-}
+      throw new Error("Invalid tag detected");
+    }
 
-    // Map TagName[] to tag IDs from TAGS
     const tagConnections = data.tags.map((tag: TagName) => ({
       id: TAGS[tag],
     }));
 
-    // Create character
+  
     const character = await prisma.character.create({
       data: {
         title: data.title,
@@ -81,11 +78,18 @@ export async function fetchAllCharacters(page: number, limit: number) {
       orderBy: { createdAt: "desc" },
       skip: (page - 1) * limit,
       take: limit,
-      include: {
-        user: { select: { id: true, username: true } },
-        tags: { select: { id: true, name: true } },
-        _count: { select: { chats: true } },
+      select:{
+          id: true,
+          title: true,
+          profilePhotoURL: true,
+          description: true,
+          createdAt: true,
+          updatedAt: true,
+          creator: true,
+          user: {select: {id: true, username: true}},
+          _count: {select: {chats:true}},
       },
+      
     });
 
     const formatted = characters.map(({ _count, ...rest }) => ({
@@ -124,28 +128,35 @@ export async function fetchAllCharacters(page: number, limit: number) {
 
 export const fetchCharacter = async (charId: string) => {
   try {
-    // 1️⃣ Get the signed-in user
+    
     const session = await getServerSession(NEXT_AUTH_CONFIG);
     if (!session?.user?.id) {
       return { success: false, data: "Not authenticated" };
     }
     const userId = session.user.id;
 
-    // 2️⃣ Fetch character details
     const character = await prisma.character.findUnique({
       where: { id: charId },
-      include: {
-        user: { select: { id: true, username: true } },
-        tags: { select: { id: true, name: true } },
-        _count: { select: { chats: true } },
-      },
+      select: {
+          id: true,
+          title: true,
+          profilePhotoURL: true,
+          description: true,
+          createdAt: true,
+          updatedAt: true,
+          creator: true,
+
+          user: {select: {id: true, username: true}},
+          tags: {select: {id: true, name: true}},
+          _count: {select: {chats:true}},
+        }
     });
 
     if (!character) {
       return { success: false, data: "Character not found" };
     }
 
-    // 3️⃣ Check if a chat already exists between this user & character
+    
     const existingChat = await prisma.chat.findFirst({
       where: {
         userId,
@@ -158,7 +169,7 @@ export const fetchCharacter = async (charId: string) => {
       success: true,
       data: {
         ...character,
-        existingChatId: existingChat?.id ?? null, // ✅ add chat id if present
+        existingChatId: existingChat?.id ?? null, 
       },
     };
   } catch (error) {
@@ -206,4 +217,36 @@ export const fetchMyCharacter = async () =>{
   }catch(error){
       return {success: false, chracters: [], totalCount: 0}
   }
+}
+
+export const deleteChat = async (chatId: string) => {
+    const session = await getServerSession(NEXT_AUTH_CONFIG)
+    
+    if (!session?.user?.id) {
+        return { success: false, message: "Not authenticated" }
+    }
+
+    try {
+        const chat = await prisma.chat.findFirst({
+            where: {
+                id: chatId,
+                userId: session.user.id
+            }
+        })
+
+        if (!chat) {
+            return { success: false, message: "Chat not found or unauthorized" }
+        }
+
+        await prisma.chat.delete({
+            where: {
+                id: chatId
+            }
+        })
+
+        return { success: true, message: "Chat deleted successfully" }
+    } catch (error) {
+        console.error("Delete chat error:", error)
+        return { success: false, message: "Failed to delete chat" }
+    }
 }

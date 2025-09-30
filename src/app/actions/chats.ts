@@ -12,9 +12,10 @@ import { string } from "zod/v4";
 
 
 const openai = new OpenAI({
-        baseURL: 'https://api.deepseek.com',
-        apiKey:  process.env.DEEPSEEK_API,
+    baseURL: 'https://api.deepseek.com',
+    apiKey:  process.env.DEEPSEEK_API,
 });
+
 
 export const createChat= async (charID:string) => {
     const session = await getServerSession(NEXT_AUTH_CONFIG);
@@ -37,7 +38,7 @@ export const createChat= async (charID:string) => {
                 characterId: charID,
                 messages: {
                     create: {
-                    sender: "AI", // Character sends the first message
+                    sender: "AI", 
                     content: char.initialMessage,
                 },
             },

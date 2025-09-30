@@ -39,7 +39,7 @@ export const Form = () => {
 
     return (
         <div className="pt-10 px-6 pb-4 md:px-20 lg:px-32">
-            {/* Header Section */}
+    
             <div className="text-center mb-8">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
                     Create a Persona!
@@ -49,7 +49,7 @@ export const Form = () => {
                 </p>
             </div>
 
-            {/* Error Message */}
+      
             {error && (
                 <div className="max-w-4xl mx-auto mb-6">
                     <div className="bg-red-500/20 border border-red-400/50 text-red-100 p-4 rounded-xl text-center backdrop-blur-sm">
@@ -61,7 +61,7 @@ export const Form = () => {
             <div className="max-w-2xl mx-auto">
                 <form onSubmit={handleSubmit}>
                     <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/20 p-6 shadow-2xl space-y-6">
-                        {/* Name Section */}
+                      
                         <div className="space-y-3">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-full flex items-center justify-center">
@@ -78,7 +78,7 @@ export const Form = () => {
                             />
                         </div>
 
-                        {/* Content Section */}
+                      
                         <div className="space-y-3">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-full flex items-center justify-center">
@@ -95,7 +95,7 @@ export const Form = () => {
                             />
                         </div>
 
-                        {/* Info Section */}
+                
                         <div className="bg-slate-100 rounded-lg p-4">
                             <ul className="text-sm text-slate-600 space-y-2"> 
                                 <li className="flex items-start gap-2">
@@ -109,7 +109,7 @@ export const Form = () => {
                             </ul>
                         </div>
 
-                        {/* Submit Button */}
+                   
                         <div className="flex justify-center pt-4">
                             <Button 
                                 type="submit"

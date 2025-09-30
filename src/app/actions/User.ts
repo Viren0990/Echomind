@@ -12,8 +12,7 @@ import { NEXT_AUTH_CONFIG } from "@/lib/auth";
 
 
 export async function signup(email:string, username: string, password: string){
-    const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS ?? 10);
-
+    
     const validated = signupSchema.safeParse({email,username,password});
     if (!validated.success) {
         return { success: false, message: validated.error.errors[0].message };

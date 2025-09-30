@@ -6,7 +6,6 @@ import prisma from "@/db/index";
 import bcrypt from "bcrypt";
 
 
-// Extend NextAuth types to include `id`
 declare module "next-auth" {
   interface User {
     id: string;

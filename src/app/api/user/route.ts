@@ -5,7 +5,6 @@ import prisma from "@/db";
 
 export async function GET() {
   const session = await getServerSession(NEXT_AUTH_CONFIG);
-  console.log("A")
   if (!session?.user?.id) {
     return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
   }
@@ -35,7 +34,6 @@ export async function GET() {
 
     return NextResponse.json({ success: true, user }, { status: 200 });
   } catch (error: any) {
-    console.error("Fetch User Details Error:", error);
     return NextResponse.json(
       { success: false, message: "An error occurred. Please try again later." },
       { status: 500 }

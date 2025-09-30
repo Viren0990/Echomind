@@ -6,7 +6,6 @@ import Link from "next/link";
 export const Hero = () => {
     return(
         <div className="min-h-screen relative">
-            {/* Background Image */}
             <Image
                 src={qwq}
                 alt="Hero background"
@@ -17,17 +16,13 @@ export const Hero = () => {
                 quality={90}
             />
             
-            {/* Dark Overlay */}
-            
-            
-            {/* Content Overlay */}
             <div className="relative z-10">
                 <Navbar />  
                 
-                {/* Hero Content */}
+             
                 <div className="relative z-10 flex items-center justify-center min-h-[80vh] px-4 pt-16 md:pt-30">
                     <div className="max-w-4xl mx-auto text-center">
-                        {/* Main Heading */}
+                       
                         <div className="mt-12 mb-8 md:mt-8">
                             <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-white via-slate-100 to-indigo-100 bg-clip-text text-transparent drop-shadow-2xl">
                                 EchoMind
@@ -38,8 +33,7 @@ export const Hero = () => {
                                 Create your story, forge relationships, and explore endless adventures.
                             </p>
                         </div>
-                        
-                        {/* CTA Buttons */}
+                       
                         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
                             <button className="group bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full text-lg transition-all duration-300 shadow-2xl hover:shadow-indigo-500/25 hover:scale-105 border-2 border-white/20">
                                 <Link href="/explore" className="flex items-center justify-center gap-2">
@@ -54,7 +48,7 @@ export const Hero = () => {
                             </Link>
                         </div>
                         
-                        {/* Stats */}
+                        
                         <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
                             <div className="text-center">
                                 <div className="text-3xl md:text-4xl font-bold text-white mb-2 drop-shadow-lg">1000+</div>
