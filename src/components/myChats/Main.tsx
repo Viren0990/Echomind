@@ -8,6 +8,18 @@ import { DeleteChatButton } from "@/components/DeleteChatButton";
 const ChatsList = async () => {
   let data: ChatItem[] | string | undefined;
 
+  const getTruncatedTitle = (title: string) => {
+    const truncate = (text: string, maxLength: number) => {
+      return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+    };
+
+    return {
+      mobile: truncate(title, 6),     
+      tablet: truncate(title, 12),       
+      desktop: truncate(title, 24)     
+    };
+  };
+
   try {
     const res = await fetchMyChats();
 
@@ -51,55 +63,74 @@ const ChatsList = async () => {
       <div className="max-w-4xl mx-auto">
         {Array.isArray(data) && data.length > 0 ? (
           <div className="space-y-4">
-            {data.map((chat) => (
-              <div key={chat.id} className="group block relative">
-                <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/20 p-6 shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 hover:scale-[1.02] hover:bg-white">
-                  <div className="flex items-center gap-6">
-                    <div className="flex-shrink-0">
-                      <div className="w-18 h-18 rounded-2xl overflow-hidden border-2 border-slate-200 group-hover:border-indigo-300 transition-colors shadow-lg">
-                        <img
-                          src={chat.character.profilePhotoURL}
-                          alt={chat.character.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex items-start justify-between w-full">
-                      <div className="flex-1 min-w-0">
-                        <h1 className="text-xl font-bold text-slate-800 group-hover:text-indigo-600 transition-colors mb-2 truncate">
-                          {chat.character.title}
-                        </h1>
-                        <div className="flex items-center gap-1 text-slate-600">
-                          <MessageSquare className="w-4 h-4" />
-                          <span className="text-sm">
-                            {chat._count.messages} message{chat._count.messages !== 1 ? 's' : ''}
-                          </span>
+            {data.map((chat) => {
+              const truncatedTitles = getTruncatedTitle(chat.character.title);
+              
+              return (
+                <div key={chat.id} className="group block relative">
+                  <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/20 p-6 shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 hover:scale-[1.02] hover:bg-white">
+                    <div className="flex items-center gap-6">
+                      <div className="flex-shrink-0">
+                        <div className="w-18 h-18 rounded-2xl overflow-hidden border-2 border-slate-200 group-hover:border-indigo-300 transition-colors shadow-lg">
+                          <img
+                            src={chat.character.profilePhotoURL}
+                            alt={chat.character.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          />
                         </div>
                       </div>
 
-                      {/* Action Buttons */}
-                      <div className="flex items-center gap-2 ml-4">
-                        {/* Delete Button */}
-                        <DeleteChatButton 
-                          chatId={chat.id} 
-                          characterName={chat.character.title} 
-                        />
+                      <div className="flex items-start justify-between w-full min-w-0">
+                        <div className="flex-1 min-w-0 pr-4">
+                          
+                          <h1 className="text-xl font-bold text-slate-800 group-hover:text-indigo-600 transition-colors mb-2"
+                              title={chat.character.title} 
+                          >
+                            
+                            <span className="block sm:hidden">
+                              {truncatedTitles.mobile}
+                            </span>
+                            
+                            <span className="hidden sm:block lg:hidden">
+                              {truncatedTitles.tablet}
+                            </span>
+                           
+                            <span className="hidden lg:block">
+                              {truncatedTitles.desktop}
+                            </span>
+                          </h1>
+                          
+                          <div className="flex items-center gap-1 text-slate-600">
+                            <MessageSquare className="w-4 h-4" />
+                            <span className="text-sm">
+                              {chat._count.messages} message{chat._count.messages !== 1 ? 's' : ''}
+                            </span>
+                          </div>
+                        </div>
+
                         
-                        {/* Continue Chat Button */}
-                        <Link 
-                          href={`/explore/${chat.character.id}`}
-                          className="bg-slate-100 group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-blue-600 text-slate-700 group-hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-lg flex items-center gap-2"
-                        >
-                          Continue Chat
-                          <ArrowRight className="hidden sm:block w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </Link>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          
+                          <DeleteChatButton 
+                            chatId={chat.id} 
+                            characterName={chat.character.title} 
+                          />
+                          
+                         
+                          <Link 
+                            href={`/explore/${chat.character.id}`}
+                            className="bg-slate-100 group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-blue-600 text-slate-700 group-hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-lg flex items-center gap-2 whitespace-nowrap"
+                          >
+                            Continue Chat
+                            <ArrowRight className="hidden sm:block w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : Array.isArray(data) && data.length === 0 ? (
           <div className="text-center py-16">
@@ -133,7 +164,6 @@ const ChatsList = async () => {
   );
 };
 
-// Main component wrapped with provider
 export const Main = () => {
   return (
     <DeleteChatProvider>

@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Echomind
 
-## Getting Started
+Echomind is a **full-stack AI-powered character chat and management platform** that allows users to create, explore, and interact with AI characters in real-time. It serves as a creative and interactive platform where users can develop their own characters, chat with them, and manage conversations efficiently.
 
-First, run the development server:
+---
+
+## Features
+
+1. **User Authentication**  
+   - Secure sign-in using **NextAuth.js** with credentials provider.  
+   - Passwords hashed with **bcrypt**.  
+   - ZOD validation useed.
+
+2. **Character Management**  
+   - Create, view, and manage AI characters.  
+   - Upload profile photos and add descriptions, personality, scenario, initial messages, and tags.  
+   - Images stored in cloudinary.
+   - Edit or delete characters.  
+
+3. **Conversations**  
+   - Using DS V3.1 for AI conversations.
+
+4. **Explore Characters**  
+   - Browse all characters with pagination and search functionality.  
+   - View character details including creator, description, tags, and chat count.  
+
+5. **Responsive UI**  
+   - Built using **Tailwind CSS** for fully responsive designs across devices.  
+   - Smooth hover effects, modals, and transitions.  
+
+6. **State Management & Caching**  
+   - Uses **Zustand** for caching user’s characters to minimize repeated API calls.  
+   - Cache invalidation occurs when characters are created, edited, or deleted.  
+
+---
+
+## Technologies Used
+
+- **Frontend**:  
+  - React.js  
+  - Next.js 13 (App Router)  
+  - Tailwind CSS  
+  - Lucide React (icons)  
+
+- **Backend**:  
+  - Node.js & Express (API handling)  
+  - Prisma ORM  
+  - PostgreSQL (database)  
+
+- **Authentication & Security**:  
+  - NextAuth.js with Credentials Provider  
+  - JWT for session management  
+  - Bcrypt for password hashing  
+
+- **Real-Time Communication**:  
+  - Socket.io  
+
+- **State Management**:  
+  - Zustand (for caching characters and chat state)  
+
+
+ **Clone the repository**  
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/echomind.git
+cd echomind
+
+# Install dependencies 
+npm install
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# 📸 Some Example Screenshots
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Signin Page
+![Signin Page](SC/signin.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Landing Page
+![Landing Page](SC/landing.png)
 
-## Learn More
+### Explore Page
+![Explore Page](SC/explore.png)
 
-To learn more about Next.js, take a look at the following resources:
+### Character Page
+![Character Page](SC/characterPage.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Chat Page
+![Chat Page](SC/chat.png)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Create Character Page
+![Create Character Page](SC/createCharacter1.png)
+![Create Character Page](SC/createCharacter2.png)
+![Create Character Page](SC/createCharacter3.png)
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Future Enhancements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Implement AI-driven recommendations for characters to chat with.
+
+Integrate image moderation and profile verification.
+
+Add dark mode toggle.
+
+Deploy a mobile-friendly PWA version for offline usage.

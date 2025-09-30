@@ -6,6 +6,7 @@ import prisma from "@/db/index";
 import bcrypt from "bcrypt";
 
 
+
 declare module "next-auth" {
   interface User {
     id: string;
@@ -36,7 +37,8 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password are required.");
         }
-
+        
+        
 
         const parsed = loginSchema.safeParse(credentials);
         if (!parsed.success) throw new Error("Invalid input.");
