@@ -1,6 +1,4 @@
-import { Input } from "../ui/input"
-import { Search, Sparkles, MessageCircle, User, Calendar, ChevronLeft, ChevronRight } from "lucide-react"
-import { fetchAllCharacters } from "@/app/actions/character"
+
 import { Grid } from "./charGrid"
 
 export const Main = async () => {   

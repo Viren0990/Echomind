@@ -93,6 +93,24 @@ npm install
 ![Create Character Page](SC/createCharacter3.png)
 
 
+
+# .env.example
+- DATABASE_URL=
+- BCRYPT_SALT_ROUNDS=10
+- NODE_ENV=
+
+- NEXTAUTH_URL=
+- NEXTAUTH_SECRET=
+
+- CLOUDINARY_CLOUD_NAME=
+- CLOUDINARY_API_KEY=
+- CLOUDINARY_API_SECRET=
+
+- DEEPSEEK_API = 
+
+- NEXT_PUBLIC_BASE_URL = 
+
+
 ### Future Enhancements
 
 Implement AI-driven recommendations for characters to chat with.
@@ -102,3 +120,5 @@ Integrate image moderation and profile verification.
 Add dark mode toggle.
 
 Deploy a mobile-friendly PWA version for offline usage.
+
+Better DockerFile

@@ -30,7 +30,8 @@ export const Form = () => {
             }else {
                 setError(res.message || "Failed to create persona");
             }
-        }catch(error:any){
+        }catch(error){
+            console.log(error);
             setError("Unexpected error occurred please try again later!")
         }finally{
             setLoading(false);
@@ -45,7 +46,7 @@ export const Form = () => {
                     Create a Persona!
                 </h1>
                 <p className="text-slate-300 text-lg max-w-2xl mx-auto">
-                    Let's start by building your own persona that will be sent to characters you chat with
+                    Let us start by building your own persona that will be sent to characters you chat with
                 </p>
             </div>
 

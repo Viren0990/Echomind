@@ -1,0 +1,45 @@
+# Node modules (don’t copy local deps, we install inside container)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Logs
+*.log
+logs
+.pnpm-debug.log*
+
+# Environment files (prevent leaking secrets into the image)
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Next.js build output
+.next
+out
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Git
+.git
+.gitignore
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Test / Coverage
+coverage
+__tests__
+*.spec.ts
+*.test.ts

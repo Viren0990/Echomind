@@ -32,10 +32,8 @@ export async function signup(email:string, username: string, password: string){
             success: true, 
             user: { id: user.id, email: user.email, username: user.username } 
         };
-    }catch(error: any){
-        if (error.code === "P2002") {
-            return { success: false, message: "Email is already taken" };
-        }
+    }catch(error){
+        
         console.error("Signup Error:", error);
         return { success: false, message: "An error occurred. Please try again later." };
     }
@@ -58,6 +56,7 @@ export const createPersona = async (data: persona) => {
 
         return { success: true, message: "Persona Created", persona };
     }catch(error){
+       console.error("Fetch User Details Error:", error);
         return { success: false, message: "Error, Try again Later."}
     }
 }
@@ -93,7 +92,7 @@ export const fetchUserDetails = async () => {
     }
 
     return { success: true, user };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Fetch User Details Error:", error);
     return { success: false, message: "An error occurred. Please try again later." };
   }

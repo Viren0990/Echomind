@@ -20,6 +20,7 @@ export const Main = async () => {
         }
         userData = data.user;
     }catch(error){
+        console.log(error);
         return(
             <div className="pt-10 px-6 pb-4 md:px-20 lg:px-32">
                 <div className="text-center">
@@ -31,7 +32,7 @@ export const Main = async () => {
         )
     }
 
-    // Format date helper function
+   
     const formatDate = (dateString: Date) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', { 
@@ -43,7 +44,7 @@ export const Main = async () => {
 
     return(
         <div className="pt-10 px-6 pb-8 md:px-20 lg:px-32">
-            {/* Header */}
+        
             <div className="text-center mb-8">
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
                     Profile
@@ -52,10 +53,9 @@ export const Main = async () => {
             </div>
 
             <div className="max-w-4xl mx-auto space-y-6">
-                {/* User Info Card */}
                 <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/20 p-6 shadow-2xl">
                     <div className="flex items-start gap-6">
-                        {/* Profile Picture */}
+                        
                         <div className="flex-shrink-0">
                             <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
                                 <span className="text-2xl font-bold text-white">
@@ -64,7 +64,7 @@ export const Main = async () => {
                             </div>
                         </div>
 
-                        {/* User Details */}
+                        
                         <div className="flex-1 min-w-0">
                             <h2 className="text-2xl font-bold text-slate-800 mb-2">{userData.username}</h2>
                             
@@ -87,7 +87,7 @@ export const Main = async () => {
                     </div>
                 </div>
 
-                {/* Personas Section */}
+               
                 <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/20 p-6 shadow-2xl">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
@@ -103,7 +103,7 @@ export const Main = async () => {
 
                     {userData.personas.length > 0 ? (
                         <div className="grid gap-4 md:grid-cols-2">
-                            {userData.personas.map((persona: any) => (
+                            {userData.personas.map((persona: {id:string, name: string, content: string, createdAt: Date}) => (
                                 <div 
                                     key={persona.id}
                                     className="bg-slate-50 rounded-xl p-4 border border-slate-200 transition-all duration-200 hover:bg-white hover:shadow-lg"

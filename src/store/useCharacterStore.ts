@@ -1,9 +1,23 @@
 import { create } from "zustand";
 import { Pagination } from "@/types";
 
+
+interface Character {
+  id: string;
+  title: string;
+  profilePhotoURL: string;
+  description: string;
+  user: {
+    id: string
+    username: string;
+  };
+  chatCount: number;
+}
+
+
 interface CharacterStore {
-  pages: Record<number, { characters: any[]; pagination: Pagination }>; 
-  setPageData: (page: number, characters: any[], pagination: Pagination) => void;
+  pages: Record<number, { characters: Character[]; pagination: Pagination }>; 
+  setPageData: (page: number, characters: Character[], pagination: Pagination) => void;
   clearCache: () => void;
 }
 

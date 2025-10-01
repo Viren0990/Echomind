@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react"
 import { Send, MoreVertical, ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Message, ChatData } from "@/types"
+import Image from "next/image";
 
 
 
@@ -29,6 +30,7 @@ export const Main = ({ id }: { id: string }) => {
                     setError(result.data as string)
                 }
             } catch (err) {
+                console.log(err);
                 setError("Failed to load chat")
             } finally {
                 setLoading(false)
@@ -141,7 +143,7 @@ export const Main = ({ id }: { id: string }) => {
             setNewMessage(messageText) 
         }
     } catch (error) {
-
+        console.log(error);
         setChatData(prev => {
             if (!prev) return null
             return {
@@ -213,11 +215,15 @@ export const Main = ({ id }: { id: string }) => {
                 
                 <div className="flex items-center gap-3 flex-1">
                     <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 border-slate-600">
-                        <img 
-                            src={chatData.character.profilePhotoURL} 
-                            alt={chatData.character.name}
-                            className="w-full h-full object-cover"
-                        />
+                        <div className="relative w-full h-full">
+                            <Image
+                                src={chatData.character.profilePhotoURL}
+                                alt={chatData.character.name}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 40vw"
+                                className="object-cover"
+                            />
+                        </div>
                     </div>
                     <div>
                         <h1 className="text-white font-semibold text-lg">{chatData.character.name}</h1>
@@ -237,11 +243,7 @@ export const Main = ({ id }: { id: string }) => {
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center">
                             <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 border-slate-600 mx-auto mb-4">
-                                <img 
-                                    src={chatData.character.profilePhotoURL} 
-                                    alt={chatData.character.name}
-                                    className="w-full h-full object-cover"
-                                />
+                                <div className="relative w-full h-full"><Image src={chatData.character.profilePhotoURL} alt="pp" fill className="object-cover" /></div>
                             </div>
                             <h3 className="text-slate-300 text-lg font-medium mb-2">
                                 Start chatting with {chatData.character.name}
@@ -265,11 +267,7 @@ export const Main = ({ id }: { id: string }) => {
                                     <div className={`flex gap-3 max-w-[80%] ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
                                         {!isUser && (
                                             <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 border border-slate-600">
-                                                <img 
-                                                    src={chatData.character.profilePhotoURL} 
-                                                    alt={chatData.character.name}
-                                                    className="w-full h-full object-cover"
-                                                />
+                                                <div className="relative w-full h-full"><Image src={chatData.character.profilePhotoURL} alt="pp" fill className="object-cover" /></div>
                                             </div>
                                         )}
                                         <div className={`flex flex-col gap-1 ${isUser ? 'items-end' : 'items-start'}`}>

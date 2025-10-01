@@ -1,4 +1,3 @@
-import { Navbar } from "../Navbar"
 import { Main } from "./main"
 
 export const Pagee = ({ id }: { id: string }) => {

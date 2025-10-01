@@ -3,7 +3,7 @@
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
-import { Heart, Lock, Mail, Sparkles, UserRoundPen, ArrowRight } from "lucide-react"
+import {  Lock, Mail, UserRoundPen, ArrowRight } from "lucide-react"
 import { useState } from "react"
 import { signup } from "@/app/actions/User"
 import Link from "next/link";
@@ -36,7 +36,8 @@ export const SignupAuth = () => {
                 router.push("/signin"); 
             }
             
-        }catch(error: any){
+        }catch(error){
+            console.log(error);
             setError("An unexpected error occurred. Please try again.") 
             return;
         } finally {
@@ -46,14 +47,14 @@ export const SignupAuth = () => {
 
     return (
         <div className="flex flex-col p-8 items-center justify-center space-y-6 shadow-2xl border-2 border-white/20 backdrop-blur-sm bg-white/95 rounded-2xl max-h-screen">
-            {/* Header Section */}
+           
             <div className="text-center pt-4">
                 <h1 className="text-slate-800 text-3xl font-bold mb-2">Welcome!</h1>
-                <p className="text-slate-600 text-lg">Let's create your account and start your journey</p>
+                <p className="text-slate-600 text-lg">Lets create your account and start your journey</p>
             </div>
             
             <form onSubmit={handleSubmit} className="w-full space-y-6">
-                {/* Error Message */}
+                
                 {error && (
                     <div className="text-red-600 text-sm text-center p-3 bg-red-50 border border-red-200 rounded-xl shadow-sm">
                         {error}

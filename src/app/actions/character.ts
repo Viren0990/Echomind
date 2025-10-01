@@ -7,16 +7,21 @@ import { CreateCharacterInput, TagName } from "@/types";
 import { getServerSession } from "next-auth";
 import { NEXT_AUTH_CONFIG } from "@/lib/auth";
 
-const uploadImage = async (file: File) => {
+interface CloudinaryUploadResult {
+  secure_url: string;
+ 
+}
+
+const uploadImage = async (file: File): Promise<CloudinaryUploadResult> => {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  return new Promise<any>((resolve, reject) => {
+  return new Promise<CloudinaryUploadResult>((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       { folder: "characters" },
       (error, result) => {
         if (error) return reject("error");
-        resolve(result);
+        resolve(result as CloudinaryUploadResult);
       }
     );
 
@@ -60,7 +65,7 @@ export const uploadCharacter = async (data: CreateCharacterInput) => {
     });
 
     return { success: true, character };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Upload Character Error:", error);
     return {
       success: false,
@@ -93,9 +98,9 @@ export async function fetchAllCharacters(page: number, limit: number) {
     });
 
     const formatted = characters.map(({ _count, ...rest }) => ({
-      ...rest,
-      chatCount: _count?.chats ?? 0,
-    }));
+  ...rest,
+  chatCount: _count?.chats ?? 0,
+}));
 
     return {
       success: true,
@@ -215,6 +220,7 @@ export const fetchMyCharacter = async () =>{
 
       return {success: true, characters: res, totalCount}
   }catch(error){
+      console.log(error);
       return {success: false, chracters: [], totalCount: 0}
   }
 }

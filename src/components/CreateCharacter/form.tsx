@@ -102,7 +102,8 @@ export const Form = () => {
             } else {
                 setMessage(res.message || "Failed to create character");
             }
-        }catch(error:any){
+        }catch(error){
+            console.log(error);
             setMessage("Unexpected error occurred please try again later!")
         }finally{
             setLoading(false);
@@ -236,7 +237,7 @@ export const Form = () => {
                                     onChange={(e)=>{setDescription(e.target.value)}}
                                 />
                                 <p className="text-sm text-slate-600 bg-slate-100 rounded-lg p-3">
-                                    This appears on your character card and helps with discovery, but doesn't influence responses
+                                    This appears on your character card and helps with discovery, but does not influence responses
                                 </p>
                             </div>
                         </div>

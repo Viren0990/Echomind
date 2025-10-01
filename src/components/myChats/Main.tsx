@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ChatItem } from "@/types";
 import { DeleteChatProvider } from "@/components/DeleteChatContext";
 import { DeleteChatButton } from "@/components/DeleteChatButton";
+import Image from "next/image";
+
 
 const ChatsList = async () => {
   let data: ChatItem[] | string | undefined;
@@ -38,6 +40,7 @@ const ChatsList = async () => {
       data = res.data;
     }
   } catch (error) {
+    console.log(error);
     return (
       <div className="pt-10 px-6 pb-8 md:px-20 lg:px-32">
         <div className="max-w-4xl mx-auto">
@@ -52,7 +55,7 @@ const ChatsList = async () => {
 
   return (
     <div className="pt-10 px-6 pb-8 md:px-20 lg:px-32">
-      {/* Header */}
+ 
       <div className="text-center mb-8">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
           Your Conversations
@@ -72,11 +75,15 @@ const ChatsList = async () => {
                     <div className="flex items-center gap-6">
                       <div className="flex-shrink-0">
                         <div className="w-18 h-18 rounded-2xl overflow-hidden border-2 border-slate-200 group-hover:border-indigo-300 transition-colors shadow-lg">
-                          <img
-                            src={chat.character.profilePhotoURL}
-                            alt={chat.character.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                          />
+                         <div className="relative w-full h-full">
+  <Image
+    src={chat.character.profilePhotoURL}
+    alt={chat.character.title}
+    fill
+    sizes="(max-width: 768px) 100vw, 33vw"
+    className="object-cover group-hover:scale-110 transition-transform duration-300"
+  />
+</div>
                         </div>
                       </div>
 

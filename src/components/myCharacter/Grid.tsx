@@ -3,15 +3,32 @@
 import { fetchMyCharacter } from "@/app/actions/character"
 import { MessageCircle, User, Sparkles } from "lucide-react";
 import Link from 'next/link';
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMyCharacterStore } from "@/store/useMyCharacterStore";
+import Image from "next/image";
+
+interface Character {
+  _count?: {
+    chats: number;
+  }
+  id: string;
+  title: string;
+  profilePhotoURL: string;
+  description: string;
+  user: {
+    username: string;
+  };
+  chatCount?: number;
+}
+
+
 
 export const Grid = () => {
     const { characters, totalCount, setMyCharacters } = useMyCharacterStore(); 
     const [loading, setLoading] = useState(!characters); 
     const [error, setError] = useState<string | null>(null);
     
-    const fetchMyChar = async () => {
+    const fetchMyChar = useCallback(async () => {
         try { 
             setLoading(true);
             setError(null);
@@ -30,13 +47,13 @@ export const Grid = () => {
         } finally {
             setLoading(false);
         }
-    }
+    }, [setMyCharacters]);
 
     useEffect(() => {
         if (!characters) {
             fetchMyChar();
         }
-    }, [characters])
+    }, [characters, fetchMyChar])
 
     
     const truncateDescription = (text: string, wordLimit: number = 20) => {
@@ -115,7 +132,7 @@ export const Grid = () => {
                     </div>
                 ) : (
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                        {characters?.map((character: any) => (
+                        {characters?.map((character: Character) => (
                             <Link 
                                 key={character.id}
                                 href={`/explore/${character.id}`}
@@ -124,11 +141,15 @@ export const Grid = () => {
                                 <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 hover:scale-105 cursor-pointer flex flex-col h-full hover:bg-white">
                                     
                                     <div className="relative w-full h-48 rounded-t-2xl overflow-hidden flex-shrink-0">
-                                        <img
-                                            src={character.profilePhotoURL}
-                                            alt={character.title}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                        />
+                                        <div className="relative w-full h-full">
+                                            <Image
+                                                src={character.profilePhotoURL}
+                                                alt={character.title}
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, 33vw"
+                                                className="object-cover group-hover:scale-110 transition-transform duration-300"
+                                            />
+                                        </div>
                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                     </div>
 

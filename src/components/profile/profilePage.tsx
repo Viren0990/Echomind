@@ -1,4 +1,3 @@
-import bg1  from "@/images/bg1.png"
 import Image from 'next/image';
 import { Navbar } from "../Navbar";
 import { Main } from "./main"

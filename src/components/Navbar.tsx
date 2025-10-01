@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Code2, Menu, X } from "lucide-react"; // Added X for close button
+import { Menu, X } from "lucide-react"; // Added X for close button
 import { Button } from "@/components/ui/button";
 import { useState } from "react";// Import animations
-import { useRouter } from "next/navigation";
 import rrr from "@/images/rrr.png"
 import Image from 'next/image'
 
@@ -13,7 +12,6 @@ import Image from 'next/image'
 
 export const Navbar = () => {
   const { data: session, status } = useSession();
-  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);

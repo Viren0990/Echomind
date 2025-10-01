@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export const CstSection = async () => {
   return (
     <div className="bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 py-20 relative overflow-hidden">

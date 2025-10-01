@@ -3,18 +3,13 @@
 import prisma from "@/db";
 import { getServerSession } from "next-auth";
 import { NEXT_AUTH_CONFIG } from "@/lib/auth";
-import OpenAI from "openai";
+import {getOpenAIClient} from "@/lib/OPEN_AI"
 import type { ChatCompletionMessageParam } from "openai/resources/chat";
-import { ChatData, Char, MessageHistory } from "@/types";
-import { string } from "zod/v4";
+import {  Char, MessageHistory } from "@/types";
 
 
 
 
-const openai = new OpenAI({
-    baseURL: 'https://api.deepseek.com',
-    apiKey:  process.env.DEEPSEEK_API,
-});
 
 
 export const createChat= async (charID:string) => {
@@ -47,7 +42,7 @@ export const createChat= async (charID:string) => {
     
     return { success: true, chat: newChat };
     }catch(error){
-        console.error("createChat error:", error);
+        console.error("fetchMyChats error:", error); 
         return { success: false, error: "Character not found"};
     }
 }
@@ -160,7 +155,7 @@ export const createMessage = async (userMessage: string, chatID: string, charact
         ];
           
       
-        
+        const openai = getOpenAIClient();
         const completion = await openai.chat.completions.create({
             model: "deepseek-chat",
             messages: deepseekMessages, 
@@ -206,6 +201,7 @@ export const fetchMyChats = async () => {
 
         return {success:true, data: res};
     }catch(error){
+        console.error("fetchMyChats error:", error); 
         return {success:false, data: "Server Error"};
     }
 }

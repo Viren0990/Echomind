@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { myCharacter } from "@/types";
 import {myCharacterStore} from "@/types"
 
 export const useMyCharacterStore = create<myCharacterStore>((set)=>({

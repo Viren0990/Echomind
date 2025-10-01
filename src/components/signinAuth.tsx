@@ -3,7 +3,7 @@
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
-import { Heart, Lock, Mail, Sparkles, ArrowRight } from "lucide-react"
+import { Heart, Lock, Mail,  ArrowRight } from "lucide-react"
 import { useState } from "react"
 import { signIn } from 'next-auth/react'
 import Link from "next/link";
@@ -40,7 +40,8 @@ export const SigninAuth = () => {
               router.push("/landing")
             }
             
-        }catch(error: any){
+        }catch(error){
+            console.log(error);
             setError("An unexpected error occurred. Please try again.") 
             return;
         } finally {
@@ -50,7 +51,7 @@ export const SigninAuth = () => {
 
     return (
         <div className="flex flex-col p-8 items-center justify-center space-y-6 shadow-2xl border-2 border-white/20 backdrop-blur-sm bg-white/95 rounded-2xl">
-            {/* Header Section */}
+           
             <div className="text-center pt-4">
                 <div className="inline-flex items-center justify-center gap-2 mb-4 bg-gradient-to-br from-indigo-500 to-blue-600 p-4 rounded-full shadow-lg">
                     <Heart className="w-8 h-8 text-white"/>
@@ -67,7 +68,6 @@ export const SigninAuth = () => {
                     </div>
                 )}
 
-                {/* Form Fields */}
                 <div className="w-full space-y-5">
                     <div className="space-y-3">
                         <Label htmlFor="email" className="text-sm font-medium text-slate-700 flex items-center gap-2">
@@ -106,7 +106,6 @@ export const SigninAuth = () => {
                     </div>
                 </div>
 
-                {/* Submit Button */}
                 <Button
                     type="submit"
                     disabled={loading}
@@ -125,10 +124,10 @@ export const SigninAuth = () => {
                     )}
                 </Button>
 
-                {/* Sign Up Link */}
+         
                 <div className="text-center pt-4 pb-2">
                     <p className="text-slate-600">
-                        Don't have an account?{" "}
+                        Dont have an account?{" "}
                         <Link 
                             href="/signup" 
                             className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors duration-200 hover:underline"

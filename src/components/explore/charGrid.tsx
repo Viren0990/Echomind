@@ -1,10 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { fetchAllCharacters } from "@/app/actions/character";
 import { useCharacterStore } from "@/store/useCharacterStore";
 import { User, MessageCircle, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import Image from 'next/image';
+
+interface Character {
+  id: string;
+  title: string;
+  profilePhotoURL: string;
+  description: string;
+  user: {
+    username: string;
+  };
+  chatCount: number;
+}
 
 export const Grid = () => {
   const router = useRouter();
@@ -14,8 +26,13 @@ export const Grid = () => {
   const [error, setError] = useState<string | null>(null);
   const CHARACTERS_PER_PAGE = 10;
 
-  const fetchCharacters = async (page: number) => {
-    if (pages[page]) return;
+
+
+  
+  const fetchCharacters = useCallback(async (page: number) => {
+    if (pages[page]) {
+      return;
+    }
 
     setLoading(true);
     setError(null);
@@ -23,6 +40,7 @@ export const Grid = () => {
     try {
       const result = await fetchAllCharacters(page, CHARACTERS_PER_PAGE);
       if (result.success) {
+        console.log(result.characters);
         setPageData(page, result.characters, result.pagination);
       } else {
         setError("Failed to load characters");
@@ -32,11 +50,11 @@ export const Grid = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pages, setPageData]);
 
   useEffect(() => {
     if (!pages[1]) fetchCharacters(1);
-  }, []);
+  }, [fetchCharacters, pages]);
 
   const handlePageChange = (page: number) => {
     if (page < 1) return;
@@ -74,6 +92,7 @@ export const Grid = () => {
   };
 
   const currentData = pages[currentPage];
+  
 
   return (
     <div>
@@ -100,18 +119,22 @@ export const Grid = () => {
 
         {!loading && currentData?.characters.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {currentData.characters.map((character: any) => (
+            {currentData.characters.map((character: Character) => (
               <button
                 key={character.id}
                 onClick={() => router.push(`/explore/${character.id}`)}
                 className="bg-white/95 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 hover:scale-105 cursor-pointer group flex flex-col h-full hover:bg-white"
               >
                 <div className="relative w-full h-48 rounded-t-2xl overflow-hidden flex-shrink-0">
-                  <img
-                    src={character.profilePhotoURL}
-                    alt={character.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={character.profilePhotoURL}
+                      alt={character.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 

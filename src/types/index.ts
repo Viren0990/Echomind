@@ -109,3 +109,15 @@ export interface myCharacterStore {
     setMyCharacters: (chars: myCharacter[], count: number) => void;
     clearCache: ()=>void
 }
+
+export interface Character {
+  id: string;
+  title: string;
+  profilePhotoURL: string;
+  description: string;
+  user: {
+    id: string;
+    username: string;
+  };
+  chatCount: number;
+}

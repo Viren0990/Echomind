@@ -1,10 +1,9 @@
 import { fetchCharacter } from "@/app/actions/character";
-import { Navbar } from "@/components/Navbar";
 import { MessageCircle, User, Calendar, Heart, Tag } from "lucide-react";
 import { CharacterData } from "@/types";
-import Link from 'next/link';
 import { ChatButton } from "@/components/explore/[id]/chatButton";
 import { BackButton } from "@/components/explore/[id]/BackButton";
+import Image from "next/image";
 
 export default async function Character({ params }: Readonly<{ params: { id: string } }>) {
     const { id } = await params;
@@ -21,12 +20,13 @@ export default async function Character({ params }: Readonly<{ params: { id: str
                 <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
                     <div className="bg-white/95 rounded-2xl p-8 text-center shadow-2xl">
                         <h1 className="text-2xl font-bold text-slate-800 mb-4">Character not found!</h1>
-                        <p className="text-slate-600">The character you're looking for doesn't exist.</p>
+                        <p className="text-slate-600"><p>The character you&apos;re looking for doesn&apos;t exist.</p></p>
                     </div>
                 </div>
             );
         }
-    } catch (error: any) {
+    } catch (error) {
+        console.log(error);
         return (
             <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
                 <div className="bg-white/95 rounded-2xl p-8 text-center shadow-2xl">
@@ -37,7 +37,7 @@ export default async function Character({ params }: Readonly<{ params: { id: str
         );
     }
 
-    // Format dates
+    
     const formatDate = (date: Date) => {
   return date.toLocaleDateString("en-US", {
     year: "numeric",
@@ -52,17 +52,17 @@ export default async function Character({ params }: Readonly<{ params: { id: str
             <BackButton />
             
             <div className="relative h-[75vh] overflow-hidden">
-                {/* Background Image - Fixed cropping issues */}
+                
                 <div className="absolute inset-0">
-                    <img
-                        src={character.profilePhotoURL}
-                        alt={character.title}
-                        className="w-full h-full object-cover object-center"
-                        style={{
-                            minWidth: '100%',
-                            minHeight: '100%'
-                        }}
-                    />
+                    <div className="relative w-full h-full">
+                        <Image
+                            src={character.profilePhotoURL}
+                            alt={character.title}
+                            fill
+                            sizes="100vw"
+                            className="object-cover object-center"
+                        />
+                    </div>
               
                     <div className="absolute inset-0 bg-gradient-to-b from-slate-900/30 via-slate-900/60 to-slate-900/90"></div>
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 via-transparent to-indigo-900/20"></div>
@@ -74,11 +74,17 @@ export default async function Character({ params }: Readonly<{ params: { id: str
                         <div className="flex flex-col md:flex-row md:items-end gap-6">
                             <div className="flex-shrink-0 mx-auto md:mx-0">
                                 <div className="w-36 h-36 md:w-40 md:h-40 rounded-3xl overflow-hidden border-4 border-white/80 shadow-2xl backdrop-blur-sm">
-                                    <img
-                                        src={character.profilePhotoURL}
-                                        alt={character.title}
-                                        className="w-full h-full object-cover"
-                                    />
+                                    <div className="relative w-full h-48 rounded-t-2xl overflow-hidden flex-shrink-0">
+                                        <Image
+                                            src={character.profilePhotoURL}
+                                            alt={character.title}
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 33vw"
+                                            className="object-cover group-hover:scale-110 transition-transform duration-300"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    </div>
+
                                 </div>
                             </div>
                             
@@ -88,7 +94,7 @@ export default async function Character({ params }: Readonly<{ params: { id: str
                                     {character.title}
                                 </h1>
                                 <div className="flex flex-wrap gap-3 mb-6 justify-center md:justify-start">
-                                    {character.tags?.map((tag: any) => (
+                                    {character.tags?.map((tag: { id: string; name: string }) => (
                                         <span
                                             key={tag.id}
                                             className="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-semibold border border-white/30 shadow-lg hover:bg-white/30 transition-all duration-300"
@@ -162,7 +168,7 @@ export default async function Character({ params }: Readonly<{ params: { id: str
                                 Categories
                             </h3>
                             <div className="flex flex-wrap gap-3">
-                                {character.tags?.map((tag: any) => (
+                                {character.tags?.map((tag: { id: string; name: string }) => (
                                     <span
                                         key={tag.id}
                                         className="bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-800 px-4 py-3 rounded-xl text-sm font-bold border border-purple-200 hover:from-purple-200 hover:to-indigo-200 transition-all duration-300 shadow-md"

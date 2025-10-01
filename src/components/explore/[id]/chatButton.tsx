@@ -29,6 +29,7 @@ export const ChatButton = ({ characterId, existingChatId }: ChatButtonProps) => 
 
                 router.push(`/chat/${res.chat.id}`);
             }catch(error){
+                console.log(error);
                 alert("Error from server!")
             }
         }

@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, ReactNode } from "react"
-import { Trash2, X, AlertTriangle } from "lucide-react"
+import { Trash2 } from "lucide-react"
 import { deleteChat } from "@/app/actions/character"
 import { useRouter } from "next/navigation"
 
