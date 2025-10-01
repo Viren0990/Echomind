@@ -10,8 +10,6 @@ import {  Char, MessageHistory } from "@/types";
 
 
 
-
-
 export const createChat= async (charID:string) => {
     const session = await getServerSession(NEXT_AUTH_CONFIG);
     if (!session?.user?.id) {
