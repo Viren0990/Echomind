@@ -163,34 +163,40 @@ export const Form = () => {
                             </div>
                         ) : (
                             <div className="border-2 border-slate-200 rounded-xl p-4 bg-slate-50">
-                                <div className="flex items-center gap-4">
-                                    <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-slate-200">
-                                        <Image
-                                            src={imagePreview}
-                                            alt="Preview"
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    </div>
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <CheckCircle className="w-5 h-5 text-green-500" />
-                                            <span className="text-slate-800 font-medium">Image Selected</span>
-                                        </div>
-                                        <p className="text-slate-600 text-sm">{profilePhoto?.name}</p>
-                                        <p className="text-slate-500 text-xs">
-                                            {profilePhoto && (profilePhoto.size / (1024 * 1024)).toFixed(2)} MB
-                                        </p>
-                                    </div>
-                                    <Button
-                                        type="button"
-                                        onClick={removeImage}
-                                        className="bg-red-500/20 hover:bg-red-500/30 text-red-600 border border-red-400/50 p-2 h-auto"
-                                    >
-                                        <X className="w-4 h-4" />
-                                    </Button>
-                                </div>
-                            </div>
+       
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+            
+            <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0">
+                <Image
+                    src={imagePreview}
+                    alt="Preview"
+                    fill
+                    className="object-cover"
+                />
+            </div>
+            
+           
+            <div className="flex-1 w-full sm:w-auto text-center sm:text-left">
+                <div className="flex items-center justify-center sm:justify-start gap-2 mb-2">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span className="text-slate-800 font-medium">Image Selected</span>
+                </div>
+                <p className="text-slate-600 text-sm truncate">{profilePhoto?.name}</p>
+                <p className="text-slate-500 text-xs">
+                    {profilePhoto && (profilePhoto.size / (1024 * 1024)).toFixed(2)} MB
+                </p>
+            </div>
+            
+        
+            <Button
+                type="button"
+                onClick={removeImage}
+                className="bg-red-500/20 hover:bg-red-500/30 text-red-600 border border-red-400/50 p-2 h-auto flex-shrink-0"
+            >
+                <X className="w-4 h-4" />
+            </Button>
+        </div>
+    </div>
                         )}
                         
                         <div className="mt-4 rounded-lg p-4">
