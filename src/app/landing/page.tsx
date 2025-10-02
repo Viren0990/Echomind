@@ -5,18 +5,11 @@ import { Footer } from "@/components/landing/Footer"
 
 export default function Landing(){
     return(
-
         <div className="min-h-screen"> 
             <Hero />
-            {/* Character Showcase Section */}
             <CharSection />
-            
-            {/* CTA Section */}
             <CstSection />
-            
-            {/* Footer */}
             <Footer />
-            
         </div>
     )
 }
