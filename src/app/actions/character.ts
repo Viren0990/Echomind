@@ -9,7 +9,6 @@ import { NEXT_AUTH_CONFIG } from "@/lib/auth";
 
 interface CloudinaryUploadResult {
   secure_url: string;
- 
 }
 
 const uploadImage = async (file: File): Promise<CloudinaryUploadResult> => {
@@ -28,6 +27,7 @@ const uploadImage = async (file: File): Promise<CloudinaryUploadResult> => {
     uploadStream.end(buffer);
   });
 };
+
 
 export const uploadCharacter = async (data: CreateCharacterInput) => {
   const session = await getServerSession(NEXT_AUTH_CONFIG);
@@ -75,7 +75,6 @@ export const uploadCharacter = async (data: CreateCharacterInput) => {
 };
 
 export async function fetchAllCharacters(page: number, limit: number) {
-
   try {
     const totalCount = await prisma.character.count();
     

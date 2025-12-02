@@ -1,9 +1,11 @@
 import { SigninAuth } from "@/components/signinAuth"
 import rrr from "@/images/rrr.png"
 import Image from 'next/image'
+import { SmokeCursor } from "@/components/SmokeCursor";
 
 export default function Signin(){
     return(
+        <>  <SmokeCursor />
         <div className="flex max-h-screen bg-slate-900">
             {/* Left Side - Hero Section */}
             <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 flex-col justify-center items-center p-12 text-white relative overflow-hidden">
@@ -75,5 +77,6 @@ export default function Signin(){
                 </div>
             </div>
         </div>
+        </>
     )
 }
