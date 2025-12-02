@@ -26,18 +26,16 @@ export function SmokeCursor(): JSX.Element {
       createSmokeTrail(e.pageX, e.pageY);
     }
 
-    window.addEventListener("mousemove", onMouseMove);
-    return () => window.removeEventListener("mousemove", onMouseMove);
+    globalThis.addEventListener("mousemove", onMouseMove);
+    return () => globalThis.removeEventListener("mousemove", onMouseMove);
   }, []);
 
   return (
-    <>
-      <style>{`
+    <style>{`
         @keyframes fadeOut {
           0% { opacity: 1; transform: scale(1); }
           100% { opacity: 0; transform: scale(2); }
         }
       `}</style>
-    </>
   );
 }
